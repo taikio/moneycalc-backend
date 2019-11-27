@@ -1,5 +1,6 @@
 import mongoose from 'mongoose'
 import app from '../app';
+require('dotenv').config();
 
 const port = process.env.PORT || 3000;
 
@@ -11,8 +12,10 @@ app.listen(port, () => {
         poolSize: 4
     };
 
+    const mongoUrl: string = process.env.MONGODB_URL || '';
+
     try{
-        mongoose.connect('mongodb://mongo:taikio@ds043694.mongolab.com:43694/chat', mongooseOptions);
+        mongoose.connect(mongoUrl, mongooseOptions);
             //mongoose.connect('mongodb://localhost/test');
     }catch(err){
         throw err;
