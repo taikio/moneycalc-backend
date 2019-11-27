@@ -7,3 +7,5 @@ run npm install
 # Running project
 
 execute the command: npm run dev
+
+## PS: VS Code Debug Ready
