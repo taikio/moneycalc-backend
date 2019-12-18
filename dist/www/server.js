@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose_1 = __importDefault(require("mongoose"));
 var app_1 = __importDefault(require("../app"));
+require('dotenv').config();
 var port = process.env.PORT || 3000;
 app_1.default.listen(port, function () {
     var mongooseOptions = {
@@ -12,8 +13,9 @@ app_1.default.listen(port, function () {
         useUnifiedTopology: true,
         poolSize: 4
     };
+    var mongoUrl = process.env.MONGODB_URL || '';
     try {
-        mongoose_1.default.connect('mongodb://mongo:taikio@ds043694.mongolab.com:43694/chat', mongooseOptions);
+        mongoose_1.default.connect(mongoUrl, mongooseOptions);
         //mongoose.connect('mongodb://localhost/test');
     }
     catch (err) {

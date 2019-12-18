@@ -35,40 +35,48 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var mongoose_1 = __importStar(require("mongoose"));
-var bcryptjs_1 = __importDefault(require("bcryptjs"));
-var UserSchema = new mongoose_1.Schema({
-    name: { type: String, required: true },
-    email: { type: String, required: true, unique: true, lowercase: true },
-    password: { type: String, required: true, select: false },
-    isAdmin: { type: Boolean, default: false },
-    createdAt: { type: Date, default: Date.now }
-});
-UserSchema.pre('save', function (next) {
-    return __awaiter(this, void 0, void 0, function () {
-        var hash;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, bcryptjs_1.default.hash(this.password, 10)];
-                case 1:
-                    hash = _a.sent();
-                    this.password = hash;
-                    next();
-                    return [2 /*return*/];
-            }
+var serviceOrder_1 = __importDefault(require("./serviceOrder"));
+var customError_1 = __importDefault(require("../utils/customError"));
+var ServiceOrderService = /** @class */ (function () {
+    function ServiceOrderService() {
+    }
+    ServiceOrderService.prototype.newServiceOrder = function (newServiceOrder) {
+        return __awaiter(this, void 0, void 0, function () {
+            var error_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, serviceOrder_1.default.create(newServiceOrder)];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/, newServiceOrder];
+                    case 2:
+                        error_1 = _a.sent();
+                        throw new customError_1.default('Falha ao cadastrar ordem de serviço', 400, false);
+                    case 3: return [2 /*return*/];
+                }
+            });
         });
-    });
-});
-exports.default = mongoose_1.default.model('User', UserSchema);
-//# sourceMappingURL=user.js.map
+    };
+    ServiceOrderService.prototype.getAll = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var serviceOrders;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, serviceOrder_1.default.find().populate('customer', 'name -_id')];
+                    case 1:
+                        serviceOrders = _a.sent();
+                        return [2 /*return*/, serviceOrders];
+                }
+            });
+        });
+    };
+    return ServiceOrderService;
+}());
+exports.default = ServiceOrderService;
+//# sourceMappingURL=serviceOrderService.js.map

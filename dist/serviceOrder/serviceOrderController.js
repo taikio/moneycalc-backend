@@ -35,40 +35,61 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var mongoose_1 = __importStar(require("mongoose"));
-var bcryptjs_1 = __importDefault(require("bcryptjs"));
-var UserSchema = new mongoose_1.Schema({
-    name: { type: String, required: true },
-    email: { type: String, required: true, unique: true, lowercase: true },
-    password: { type: String, required: true, select: false },
-    isAdmin: { type: Boolean, default: false },
-    createdAt: { type: Date, default: Date.now }
-});
-UserSchema.pre('save', function (next) {
-    return __awaiter(this, void 0, void 0, function () {
-        var hash;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, bcryptjs_1.default.hash(this.password, 10)];
-                case 1:
-                    hash = _a.sent();
-                    this.password = hash;
-                    next();
-                    return [2 /*return*/];
-            }
-        });
+var express_1 = __importDefault(require("express"));
+var authMiddleware_1 = __importDefault(require("../middleware/authMiddleware"));
+var serviceOrder_1 = __importDefault(require("./serviceOrder"));
+var serviceOrderService_1 = __importDefault(require("./serviceOrderService"));
+var errorMiddleware_1 = __importDefault(require("../middleware/errorMiddleware"));
+var router = express_1.default.Router();
+router.use(authMiddleware_1.default);
+router.post('/', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var newServiceOrder, serviceOrderService, serviceOrder, error_1;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                newServiceOrder = new serviceOrder_1.default({
+                    description: req.body.description,
+                    customer: req.body.customerId
+                });
+                serviceOrderService = new serviceOrderService_1.default();
+                return [4 /*yield*/, serviceOrderService.newServiceOrder(newServiceOrder)];
+            case 1:
+                serviceOrder = _a.sent();
+                return [2 /*return*/, res.send({
+                        serviceOrder: serviceOrder
+                    })];
+            case 2:
+                error_1 = _a.sent();
+                next(error_1);
+                return [2 /*return*/];
+            case 3: return [2 /*return*/];
+        }
     });
-});
-exports.default = mongoose_1.default.model('User', UserSchema);
-//# sourceMappingURL=user.js.map
+}); });
+router.get('/', function (_req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var service, serviceOrderList, error_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                service = new serviceOrderService_1.default();
+                return [4 /*yield*/, service.getAll()];
+            case 1:
+                serviceOrderList = _a.sent();
+                return [2 /*return*/, res.send({ serviceOrders: serviceOrderList })];
+            case 2:
+                error_2 = _a.sent();
+                next(error_2);
+                return [2 /*return*/];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); });
+router.use(errorMiddleware_1.default);
+exports.default = router;
+//# sourceMappingURL=serviceOrderController.js.map

@@ -41,37 +41,83 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
 var user_1 = __importDefault(require("./user"));
+var utilsService_1 = __importDefault(require("../utils/utilsService"));
+var userService_1 = __importDefault(require("./userService"));
+var authMiddleware_1 = __importDefault(require("../middleware/authMiddleware"));
+var errorMiddleware_1 = __importDefault(require("../middleware/errorMiddleware"));
 var router = express_1.default.Router();
-router.post('/register', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var email, user, error_1;
+router.post('/register', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var newUser, userService, user, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                email = req.body.email;
-                return [4 /*yield*/, user_1.default.findOne({ email: email })];
-            case 1:
-                if (_a.sent()) {
-                    return [2 /*return*/, res.status(400).send({ error: 'Usuário já cadastrado!' })];
-                }
-                _a.label = 2;
-            case 2:
-                _a.trys.push([2, 4, , 5]);
-                user = new user_1.default({
+                _a.trys.push([0, 2, , 3]);
+                newUser = new user_1.default({
                     name: req.body.name,
                     email: req.body.email,
                     password: req.body.password,
                     isAdmin: req.body.isAdmin
                 });
-                return [4 /*yield*/, user_1.default.create(user)];
-            case 3:
-                _a.sent();
-                return [2 /*return*/, res.send({ user: user })];
-            case 4:
+                userService = new userService_1.default();
+                return [4 /*yield*/, userService.register(newUser)];
+            case 1:
+                user = _a.sent();
+                return [2 /*return*/, res.send({
+                        user: user,
+                        token: utilsService_1.default.generateToken(user.id)
+                    })];
+            case 2:
                 error_1 = _a.sent();
-                return [2 /*return*/, res.status(400).send({ error: 'Falha ao cadastrar usuário!' })];
-            case 5: return [2 /*return*/];
+                next(error_1);
+                return [2 /*return*/];
+            case 3: return [2 /*return*/];
         }
     });
 }); });
+router.post('/authenticate', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, email, password, userService, userToken, error_2;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _a = req.body, email = _a.email, password = _a.password;
+                userService = new userService_1.default();
+                _b.label = 1;
+            case 1:
+                _b.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, userService.authenticate(email, password)];
+            case 2:
+                userToken = _b.sent();
+                return [2 /*return*/, res.send({ token: userToken })];
+            case 3:
+                error_2 = _b.sent();
+                next(error_2);
+                return [2 /*return*/];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); });
+router.post('/resetPassword', authMiddleware_1.default, function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var email, userService, error_3;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                email = req.body.email;
+                userService = new userService_1.default();
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, userService.resetPassword(email, req.userId)];
+            case 2:
+                _a.sent();
+                return [2 /*return*/, res.send("Ok")];
+            case 3:
+                error_3 = _a.sent();
+                next(error_3);
+                return [2 /*return*/];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); });
+router.use(errorMiddleware_1.default);
 exports.default = router;
 //# sourceMappingURL=userController.js.map

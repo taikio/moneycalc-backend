@@ -26,5 +26,5 @@ var CustomError = /** @class */ (function (_super) {
     }
     return CustomError;
 }(Error));
-exports.CustomError = CustomError;
+exports.default = CustomError;
 //# sourceMappingURL=customError.js.map

@@ -1,5 +1,5 @@
 
-export class CustomError extends Error {
+export default class CustomError extends Error {
     public readonly isOperational: boolean;
     public readonly statusCode: number;
 
