@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.use(authMiddleware);
 
-router.post('/GetPaymentMethods', async (req, res, next) => {
+router.get('/GetPaymentMethods', async (_req, res, next) => {
 
     try {
         

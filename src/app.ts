@@ -12,11 +12,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // ============ Rotas ===============
-app.use('/user', userController);
-app.use('/customer', customerController);
-app.use('/serviceOrder', serviceOrderController);
-app.use('/lookups', lookupsController);
-app.use('/bill', billController);
+app.use('/users', userController);
+app.use('/api/customers', customerController);
+app.use('/api/serviceOrders', serviceOrderController);
+app.use('/api/lookups', lookupsController);
+app.use('/api/bills', billController);
 
 // ==================================
 app.get('/', (_, res) => {

@@ -39,44 +39,49 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var serviceOrder_1 = __importDefault(require("./serviceOrder"));
-var customError_1 = __importDefault(require("../utils/customError"));
-var ServiceOrderService = /** @class */ (function () {
-    function ServiceOrderService() {
-    }
-    ServiceOrderService.prototype.newServiceOrder = function (newServiceOrder) {
-        return __awaiter(this, void 0, void 0, function () {
-            var error_1;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, serviceOrder_1.default.create(newServiceOrder)];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/, newServiceOrder];
-                    case 2:
-                        error_1 = _a.sent();
-                        throw new customError_1.default(error_1.message, 400, error_1.isOperational || false);
-                    case 3: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    ServiceOrderService.prototype.getAll = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var serviceOrders;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, serviceOrder_1.default.find().populate('customer', 'name -_id')];
-                    case 1:
-                        serviceOrders = _a.sent();
-                        return [2 /*return*/, serviceOrders];
-                }
-            });
-        });
-    };
-    return ServiceOrderService;
-}());
-exports.default = ServiceOrderService;
-//# sourceMappingURL=serviceOrderService.js.map
+var express_1 = __importDefault(require("express"));
+var authMiddleware_1 = __importDefault(require("../middleware/authMiddleware"));
+var errorMiddleware_1 = __importDefault(require("../middleware/errorMiddleware"));
+var lookupsService_1 = __importDefault(require("./lookupsService"));
+var customerService_1 = __importDefault(require("../customer/customerService"));
+var router = express_1.default.Router();
+router.use(authMiddleware_1.default);
+router.get('/GetPaymentMethods', function (_req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var lookupsService, listReturn;
+    return __generator(this, function (_a) {
+        try {
+            lookupsService = new lookupsService_1.default();
+            listReturn = lookupsService.getPaymentMethods();
+            return [2 /*return*/, res.send({
+                    paymentMethods: listReturn
+                })];
+        }
+        catch (error) {
+            next(error);
+            return [2 /*return*/];
+        }
+        return [2 /*return*/];
+    });
+}); });
+router.get('/GetCustomers', function (_req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var service, customersList, error_1;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                service = new customerService_1.default();
+                return [4 /*yield*/, service.getAll()];
+            case 1:
+                customersList = _a.sent();
+                return [2 /*return*/, res.send({ customers: customersList })];
+            case 2:
+                error_1 = _a.sent();
+                next(error_1);
+                return [2 /*return*/];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); });
+router.use(errorMiddleware_1.default);
+exports.default = router;
+//# sourceMappingURL=lookupsController.js.map

@@ -63,7 +63,7 @@ var CustomerService = /** @class */ (function () {
                         return [2 /*return*/, newCustomer];
                     case 4:
                         error_1 = _a.sent();
-                        throw new customError_1.default('Falha ao cadastrar usuário!', 400, false);
+                        throw new customError_1.default(error_1.message, 400, error_1.isOperational || false);
                     case 5: return [2 /*return*/];
                 }
             });
@@ -88,7 +88,7 @@ var CustomerService = /** @class */ (function () {
                         return [3 /*break*/, 4];
                     case 3:
                         error_2 = _a.sent();
-                        throw new customError_1.default('Falha ao alterar e-mail do cliente', 400, false);
+                        throw new customError_1.default(error_2.message, 400, error_2.isOperational || false);
                     case 4: return [2 /*return*/];
                 }
             });
@@ -113,7 +113,7 @@ var CustomerService = /** @class */ (function () {
                         return [3 /*break*/, 4];
                     case 3:
                         error_3 = _a.sent();
-                        throw new customError_1.default('Falha ao alterar nome do cliente', 400, false);
+                        throw new customError_1.default(error_3.message, 400, error_3.isOperational || false);
                     case 4: return [2 /*return*/];
                 }
             });
@@ -138,7 +138,7 @@ var CustomerService = /** @class */ (function () {
                         return [3 /*break*/, 4];
                     case 3:
                         error_4 = _a.sent();
-                        throw new customError_1.default('Falha ao alterar nome abreviado do cliente', 400, false);
+                        throw new customError_1.default(error_4.message, 400, error_4.isOperational || false);
                     case 4: return [2 /*return*/];
                 }
             });
@@ -168,7 +168,7 @@ var CustomerService = /** @class */ (function () {
                         return [3 /*break*/, 5];
                     case 4:
                         error_5 = _a.sent();
-                        throw new customError_1.default('Falha ao alterar CPF do cliente', 400, false);
+                        throw new customError_1.default(error_5.message, 400, error_5.isOperational || false);
                     case 5: return [2 /*return*/];
                 }
             });
@@ -193,7 +193,7 @@ var CustomerService = /** @class */ (function () {
                         return [3 /*break*/, 4];
                     case 3:
                         error_6 = _a.sent();
-                        throw new customError_1.default('Falha ao excluir o cliente', 400, false);
+                        throw new customError_1.default(error_6.message, 400, error_6.isOperational || false);
                     case 4: return [2 /*return*/];
                 }
             });

@@ -72,7 +72,7 @@ var UserService = /** @class */ (function () {
                         return [2 /*return*/, user];
                     case 4:
                         error_1 = _a.sent();
-                        throw new customError_1.default('Falha ao cadastrar usuário!', 400, false);
+                        throw new customError_1.default(error_1.message, 400, error_1.isOperational || false);
                     case 5: return [2 /*return*/];
                 }
             });
@@ -80,10 +80,12 @@ var UserService = /** @class */ (function () {
     };
     UserService.prototype.authenticate = function (email, password) {
         return __awaiter(this, void 0, void 0, function () {
-            var user;
+            var user, error_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, user_1.default.findOne({ email: email }).select('+password')];
+                    case 0:
+                        _a.trys.push([0, 3, , 4]);
+                        return [4 /*yield*/, user_1.default.findOne({ email: email }).select('+password')];
                     case 1:
                         user = _a.sent();
                         console.log(user);
@@ -95,13 +97,17 @@ var UserService = /** @class */ (function () {
                             throw new customError_1.default('Senha inválida!', 400, true);
                         delete user.password;
                         return [2 /*return*/, utilsService_1.default.generateToken(user.id)];
+                    case 3:
+                        error_2 = _a.sent();
+                        throw new customError_1.default(error_2.message, 400, error_2.isOperational || false);
+                    case 4: return [2 /*return*/];
                 }
             });
         });
     };
     UserService.prototype.resetPassword = function (email, currentUserId) {
         return __awaiter(this, void 0, void 0, function () {
-            var loggedUser, hash, error_2;
+            var loggedUser, hash, error_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, user_1.default.findById(currentUserId)];
@@ -120,8 +126,8 @@ var UserService = /** @class */ (function () {
                         _a.sent();
                         return [3 /*break*/, 6];
                     case 5:
-                        error_2 = _a.sent();
-                        throw new customError_1.default('Falha ao redefinir senha', 400, false);
+                        error_3 = _a.sent();
+                        throw new customError_1.default(error_3.message, 400, error_3.isOperational || false);
                     case 6: return [2 /*return*/];
                 }
             });

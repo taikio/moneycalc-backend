@@ -22,7 +22,8 @@ export interface IBill extends Document {
      */
     reversalDate?: Date,
     cancelDate?: Date,
-    computedStatus: string
+    computedStatus: string,
+    paid: boolean
 
 }
 
@@ -31,11 +32,12 @@ const BillSchema = new Schema({
     value: { type: Number, required: true },
     destiny: { type: String, required: true },
     status: { type: String, required: true, default: 'ATIVO' },
-    dueDate: { type: Date, required: true },
+    dueDate: { type: Date, required: true, default: Date.now() },
     description: { type: String, required: true },
     payDay: { type: Date, default: null },
     reversalDate: { type: Date, default: null },
     cancelDate: { type: Date, default: null },
+    paid: { type: Boolean, default: false }
 });
 
 export default mongose.model<IBill>('Bill', BillSchema);
