@@ -33,7 +33,7 @@ router.post('/register', async (req, res, next) => {
     }
 });
 
-router.post('/authenticate', async (req, res, next) => {
+router.post('/token', async (req, res, next) => {
 
     const { email, password } = req.body;
 

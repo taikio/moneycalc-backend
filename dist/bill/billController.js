@@ -179,6 +179,86 @@ router.put('/DueDate', function (req, res, next) { return __awaiter(void 0, void
         }
     });
 }); });
+router.put('/Value', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, Id, Value, billService, error_7;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _b.trys.push([0, 2, , 3]);
+                _a = req.body, Id = _a.Id, Value = _a.Value;
+                billService = new billService_1.default();
+                return [4 /*yield*/, billService.updateValue(Id, Value)];
+            case 1:
+                _b.sent();
+                return [2 /*return*/, res.send('Ok')];
+            case 2:
+                error_7 = _b.sent();
+                next(error_7);
+                return [2 /*return*/];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); });
+router.post('/Cancel/:id', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var id, billService, error_8;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                id = req.params.id;
+                billService = new billService_1.default();
+                return [4 /*yield*/, billService.delete(id)];
+            case 1:
+                _a.sent();
+                return [2 /*return*/, res.send('Ok')];
+            case 2:
+                error_8 = _a.sent();
+                next(error_8);
+                return [2 /*return*/];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); });
+router.get('/AccountBalance', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, startDate, endDate, billService, accountBalance, error_9;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _b.trys.push([0, 2, , 3]);
+                _a = req.query, startDate = _a.startDate, endDate = _a.endDate;
+                billService = new billService_1.default();
+                return [4 /*yield*/, billService.getAccountBalance(startDate, endDate)];
+            case 1:
+                accountBalance = _b.sent();
+                return [2 /*return*/, res.send({ accountBalance: accountBalance })];
+            case 2:
+                error_9 = _b.sent();
+                next(error_9);
+                return [2 /*return*/];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); });
+router.put('/MakeRetirement/:id', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var id, billService, error_10;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                id = req.params.id;
+                billService = new billService_1.default();
+                return [4 /*yield*/, billService.MakeRetirement(id)];
+            case 1:
+                _a.sent();
+                return [2 /*return*/, res.send('Ok')];
+            case 2:
+                error_10 = _a.sent();
+                next(error_10);
+                return [2 /*return*/];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); });
 router.use(errorMiddleware_1.default);
 exports.default = router;
 //# sourceMappingURL=billController.js.map

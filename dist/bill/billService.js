@@ -174,6 +174,127 @@ var BillService = /** @class */ (function () {
             });
         });
     };
+    BillService.prototype.updateValue = function (id, value) {
+        return __awaiter(this, void 0, void 0, function () {
+            var bill, error_6;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 3, , 4]);
+                        return [4 /*yield*/, bill_1.default.findById(id)];
+                    case 1:
+                        bill = _a.sent();
+                        if (!bill) {
+                            throw new customError_1.default("N\u00E3o foi encontrado nenhum lan\u00E7amento financeiro com o id " + id, 400, true);
+                        }
+                        if (value <= 0) {
+                            throw new customError_1.default('O valor deve ser maior que zero', 400, true);
+                        }
+                        return [4 /*yield*/, bill_1.default.updateOne({ _id: id }, { value: value })];
+                    case 2:
+                        _a.sent();
+                        return [3 /*break*/, 4];
+                    case 3:
+                        error_6 = _a.sent();
+                        throw new customError_1.default(error_6.message, 400, error_6.isOperational || false);
+                    case 4: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    BillService.prototype.delete = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var bill, error_7;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 3, , 4]);
+                        return [4 /*yield*/, bill_1.default.findById(id)];
+                    case 1:
+                        bill = _a.sent();
+                        if (!bill) {
+                            throw new customError_1.default('Não foi encontrado um lançamento financeiro com o ID informado', 400, true);
+                        }
+                        return [4 /*yield*/, bill_1.default.deleteOne({ _id: id })];
+                    case 2:
+                        _a.sent();
+                        return [3 /*break*/, 4];
+                    case 3:
+                        error_7 = _a.sent();
+                        throw new customError_1.default(error_7.message, 400, error_7.isOperational || false);
+                    case 4: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    BillService.prototype.getAccountBalance = function (startDate, endDate) {
+        return __awaiter(this, void 0, void 0, function () {
+            var billsList, incomingPending, outgoingPending, incomingPaid, outgoingPaid, totalIncomes, totalOutgoing, accountBalance, error_8;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, bill_1.default.find().where('dueDate').gte(startDate).lte(endDate)];
+                    case 1:
+                        billsList = _a.sent();
+                        incomingPending = linq_1.default.from(billsList).where(function (x) { return x.destiny === systemConstants_1.default.BillDestinyReceive && !x.paid; });
+                        outgoingPending = linq_1.default.from(billsList).where(function (x) { return x.destiny === systemConstants_1.default.BillDestinyPay && !x.paid; });
+                        incomingPaid = linq_1.default.from(billsList).where(function (x) { return x.destiny === systemConstants_1.default.BillDestinyReceive && x.paid; });
+                        outgoingPaid = linq_1.default.from(billsList).where(function (x) { return x.destiny === systemConstants_1.default.BillDestinyPay && x.paid; });
+                        totalIncomes = linq_1.default.from(billsList).where(function (x) { return x.destiny === systemConstants_1.default.BillDestinyReceive; });
+                        totalOutgoing = linq_1.default.from(billsList).where(function (x) { return x.destiny === systemConstants_1.default.BillDestinyPay; });
+                        accountBalance = {
+                            IncomingPendingQuantity: incomingPending.count(),
+                            IncomingPendingValue: incomingPending.sum(function (x) { return x.value; }),
+                            IncomingPaidQuantity: incomingPaid.count(),
+                            IncomingPaidValue: incomingPaid.sum(function (x) { return x.value; }),
+                            OutgoingPendingQuantity: outgoingPending.count(),
+                            OutgoingPendingValue: outgoingPending.sum(function (x) { return x.value; }),
+                            OutgoingPaidQuantity: outgoingPaid.sum(),
+                            OutgoingPaidValue: outgoingPaid.sum(function (x) { return x.value; }),
+                            IncomingOutgoingBalance: incomingPaid.sum(function (x) { return x.value; }) - outgoingPaid.sum(function (x) { return x.value; }),
+                            IncomingOutgoingProjection: totalIncomes.sum(function (x) { return x.value; }) - totalOutgoing.sum(function (x) { return x.value; })
+                        };
+                        return [2 /*return*/, accountBalance];
+                    case 2:
+                        error_8 = _a.sent();
+                        throw new customError_1.default(error_8.message, 400, error_8.isOperational || false);
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    /**
+     * Confirma a baixa do lançamento
+     */
+    BillService.prototype.MakeRetirement = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var bill, error_9;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 3, , 4]);
+                        return [4 /*yield*/, bill_1.default.findById(id)];
+                    case 1:
+                        bill = _a.sent();
+                        if (!bill) {
+                            throw new customError_1.default('Não foi encontrado um lançamento financeiro com o ID informado', 400, true);
+                        }
+                        bill.paid = true;
+                        bill.payDay = new Date(Date.now());
+                        bill.status = systemConstants_1.default.BillStatus_Pago;
+                        return [4 /*yield*/, bill.save()];
+                    case 2:
+                        _a.sent();
+                        return [3 /*break*/, 4];
+                    case 3:
+                        error_9 = _a.sent();
+                        throw new customError_1.default(error_9.message, 400, error_9.isOperational || false);
+                    case 4: return [2 /*return*/];
+                }
+            });
+        });
+    };
     return BillService;
 }());
 exports.default = BillService;

@@ -17,7 +17,9 @@ export default class ServiceOrderService {
     }
 
     public async getAll(): Promise<IServiceOrder[]> {
-        const serviceOrders = await ServiceOrder.find().populate('customer', 'name -_id');
+        const serviceOrders = await ServiceOrder.find()
+        .populate('customer', 'name -_id')
+        .populate('bill', '-_id');
 
         return serviceOrders;
     }

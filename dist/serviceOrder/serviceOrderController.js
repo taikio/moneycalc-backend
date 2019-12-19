@@ -44,30 +44,41 @@ var authMiddleware_1 = __importDefault(require("../middleware/authMiddleware"));
 var serviceOrder_1 = __importDefault(require("./serviceOrder"));
 var serviceOrderService_1 = __importDefault(require("./serviceOrderService"));
 var errorMiddleware_1 = __importDefault(require("../middleware/errorMiddleware"));
+var billService_1 = __importDefault(require("../bill/billService"));
+var systemConstants_1 = __importDefault(require("../utils/systemConstants"));
 var router = express_1.default.Router();
 router.use(authMiddleware_1.default);
-router.post('/', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var newServiceOrder, serviceOrderService, serviceOrder, error_1;
+router.post('/New', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var bill, billService, savedBill, newServiceOrder, serviceOrderService, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
+                _a.trys.push([0, 3, , 4]);
+                bill = {
+                    Description: req.body.Description,
+                    PaymentMethodSysId: req.body.PaymentMethodSysId,
+                    Value: req.body.Value,
+                    DueDate: req.body.DueDate
+                };
+                billService = new billService_1.default();
+                return [4 /*yield*/, billService.newBill(bill, systemConstants_1.default.BillDestinyReceive)];
+            case 1:
+                savedBill = _a.sent();
                 newServiceOrder = new serviceOrder_1.default({
-                    description: req.body.description,
-                    customer: req.body.customerId
+                    description: req.body.Description,
+                    customer: req.body.CustomerId,
+                    bill: savedBill
                 });
                 serviceOrderService = new serviceOrderService_1.default();
                 return [4 /*yield*/, serviceOrderService.newServiceOrder(newServiceOrder)];
-            case 1:
-                serviceOrder = _a.sent();
-                return [2 /*return*/, res.send({
-                        serviceOrder: serviceOrder
-                    })];
             case 2:
+                _a.sent();
+                return [2 /*return*/, res.send('Ok')];
+            case 3:
                 error_1 = _a.sent();
                 next(error_1);
                 return [2 /*return*/];
-            case 3: return [2 /*return*/];
+            case 4: return [2 /*return*/];
         }
     });
 }); });

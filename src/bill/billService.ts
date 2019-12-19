@@ -9,7 +9,7 @@ export default class BillService {
 
     public constructor() {}
 
-    public async newBill(newBillDto: InputBillDto, destiny: string) {
+    public async newBill(newBillDto: InputBillDto, destiny: string): Promise<IBill> {
 
         try {
             const paymentMethod = Enumerable.from(SystemConstants.ListPaymentMethods())
@@ -29,7 +29,8 @@ export default class BillService {
                 description: newBillDto.Description
             });
 
-            await Bill.create(bill);
+            const savedBill = await Bill.create(bill);
+            return savedBill;
             
         } catch(error) {
             throw new CustomError(error.message, 400, error.isOperational || false);
@@ -159,6 +160,29 @@ export default class BillService {
             }
 
             return accountBalance;
+        } catch(error) {
+            throw new CustomError(error.message, 400, error.isOperational || false);
+        }
+    }
+
+    /**
+     * Confirma a baixa do lançamento
+     */
+    public async MakeRetirement(id: string): Promise<void> {
+
+        try{
+
+            const bill = await Bill.findById(id);
+
+            if (!bill) {
+                throw new CustomError('Não foi encontrado um lançamento financeiro com o ID informado', 400, true);
+            }
+
+            bill.paid = true;
+            bill.payDay = new Date(Date.now());
+            bill.status = SystemConstants.BillStatus_Pago;
+
+            await bill.save();
         } catch(error) {
             throw new CustomError(error.message, 400, error.isOperational || false);
         }

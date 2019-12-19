@@ -72,7 +72,7 @@ router.post('/', function (req, res, next) { return __awaiter(void 0, void 0, vo
         }
     });
 }); });
-router.get('/', function (_req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+router.get('/GetList', function (_req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var customerService, customersList, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {

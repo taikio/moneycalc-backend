@@ -31,7 +31,7 @@ router.post('/', async (req, res, next) => {
     }
 });
 
-router.get('/', async (_req, res, next) => {
+router.get('/GetList', async (_req, res, next) => {
 
     try {
         const customerService = new CustomerService();

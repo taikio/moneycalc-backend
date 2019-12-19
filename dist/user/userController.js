@@ -74,7 +74,7 @@ router.post('/register', function (req, res, next) { return __awaiter(void 0, vo
         }
     });
 }); });
-router.post('/authenticate', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+router.post('/token', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var _a, email, password, userService, userToken, error_2;
     return __generator(this, function (_b) {
         switch (_b.label) {

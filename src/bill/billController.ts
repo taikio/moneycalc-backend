@@ -171,6 +171,21 @@ router.get('/AccountBalance', async (req, res, next) => {
     }
 });
 
+router.put('/MakeRetirement/:id', async (req, res, next) => {
+
+    try {
+        const id = req.params.id;
+
+        const billService = new BillService();
+        await billService.MakeRetirement(id);
+
+        return res.send('Ok');
+    } catch(error) {
+        next(error);
+        return;
+    }
+});
+
 router.use(errorMiddleware);
 
 export default router;
