@@ -107,6 +107,8 @@ router.put('/Description', async (req, res, next) => {
 
         const serviceOrderService = new ServiceOrderService();
         await serviceOrderService.changeDescription(ServiceOrderId, Description);
+
+        return res.send('Ok');
     } catch(error) {
         next(error);
         return;
