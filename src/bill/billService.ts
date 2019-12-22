@@ -4,6 +4,7 @@ import SystemConstants from "../utils/systemConstants";
 import Bill, { IBill } from "./bill";
 import CustomError from "../utils/customError";
 import OutputAccountBalanceDto from "./OutputAccountBalanceDto";
+import ServiceOrder from '../serviceOrder/serviceOrder';
 
 export default class BillService {
 
@@ -98,6 +99,21 @@ export default class BillService {
         }
     }
 
+    public async updateDescription(id: string, description: string) {
+
+        try {
+            const bill = await Bill.findById(id);
+
+            if (!bill) {
+                throw new CustomError(`Não foi encontrado nenhum lançamento financeiro com o id ${id}`, 400, true);
+            }
+
+            await Bill.updateOne({ _id: id }, { description: description });
+        } catch(error) {
+            throw new CustomError(error.message, 400, error.isOperational || false);
+        }
+    }
+
     public async updateValue(id: string, value: number) {
 
         try {
@@ -113,6 +129,30 @@ export default class BillService {
             }
 
             await Bill.updateOne({ _id: id }, { value: value });
+        } catch(error) {
+            throw new CustomError(error.message, 400, error.isOperational || false);
+        }
+    }
+
+    public async cancel(id: string) {
+
+        try {
+            const bill = await Bill.findById(id);
+
+            if (!bill) {
+                throw new CustomError('Não foi encontrado um lançamento financeiro com o ID informado', 400, true);
+            }
+
+            const serviceOrder = await ServiceOrder.findOne().where('bill').equals(id);
+
+            if (serviceOrder === null || !serviceOrder.isCanceled) {
+                throw new CustomError('Este lançamento está vinculado à uma ordem de serviço. Para cancelá-lo cancele a ordem de serviço', 400, true);
+            }
+
+            bill.status = SystemConstants.BillStatus_Cancelado;
+            bill.cancelDate = new Date(Date.now());
+
+            await bill.save();
         } catch(error) {
             throw new CustomError(error.message, 400, error.isOperational || false);
         }

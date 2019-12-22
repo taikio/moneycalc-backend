@@ -145,7 +145,7 @@ router.post('/Cancel/:id', async (req, res, next) => {
         const id = req.params.id;
 
         const billService = new BillService();
-        await billService.delete(id);
+        await billService.cancel(id);
 
         return res.send('Ok');
     } catch(error) {

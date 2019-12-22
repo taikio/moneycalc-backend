@@ -54,6 +54,65 @@ router.get('/GetList', async (_req, res, next) => {
     }
 });
 
+router.get('/GetByDate', async (req, res, next) => {
+
+    try {
+        const { startDate, endDate } = req.query;
+
+        const serviceOrderService = new ServiceOrderService();
+
+        const serviceOrderList = await serviceOrderService.GetServiceOrdersByDate(startDate, endDate);
+
+        return res.send({ serviceOrders: serviceOrderList });
+    } catch(error) {
+        next(error);
+        return;
+    }
+});
+
+router.post('/Cancel:id', async (req, res, next) => {
+
+    try {
+        const id = req.params.id;
+
+        const serviceOrderService = new ServiceOrderService();
+        await serviceOrderService.CancelServiceOrder(id);
+
+        return res.send('ok');
+    } catch(error) {
+        next(error);
+        return;
+    }
+});
+
+router.put('/Customer', async (req, res, next) => {
+
+    try {
+        const { CustomerId, ServiceOrderId } = req.body;
+
+        const serviceOrderService = new ServiceOrderService();
+        await serviceOrderService.changeCustomer(ServiceOrderId, CustomerId);
+
+        return res.send('Ok');
+    } catch(error) {
+        next(error);
+        return;
+    }
+});
+
+router.put('/Description', async (req, res, next) => {
+
+    try {
+        const { ServiceOrderId, Description } = req.body;
+
+        const serviceOrderService = new ServiceOrderService();
+        await serviceOrderService.changeDescription(ServiceOrderId, Description);
+    } catch(error) {
+        next(error);
+        return;
+    }
+});
+
 
 router.use(errorMiddleware);
 

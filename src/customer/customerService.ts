@@ -112,4 +112,19 @@ export default class CustomerService {
 
         return customers;
     }
+
+    public async getById(id: string): Promise<ICustomer> {
+
+        try {
+            const customer = await Customer.findById(id);
+
+            if (!customer) {
+                throw new CustomError('Não foi encontrado um cliente com o ID informado', 400, true);
+            }
+
+            return customer;
+        } catch(error) {
+            throw new CustomError(error.message, 400, error.isOperational || false);
+        }
+    }
 }
