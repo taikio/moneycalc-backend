@@ -16,6 +16,7 @@
             "sourceMaps": true,
             "program": "${workspaceFolder}/src/www/server.ts",
             // "preLaunchTask": "tsc: build - tsconfig.json",
+            "preLaunchTask": "npm: build",
             "outFiles": ["${workspaceFolder}/dist/**/*.js"],
             "cwd": "${workspaceFolder}",
             "protocol": "inspector",

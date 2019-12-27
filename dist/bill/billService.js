@@ -43,12 +43,13 @@ var linq_1 = __importDefault(require("linq"));
 var systemConstants_1 = __importDefault(require("../utils/systemConstants"));
 var bill_1 = __importDefault(require("./bill"));
 var customError_1 = __importDefault(require("../utils/customError"));
+var serviceOrder_1 = __importDefault(require("../serviceOrder/serviceOrder"));
 var BillService = /** @class */ (function () {
     function BillService() {
     }
     BillService.prototype.newBill = function (newBillDto, destiny) {
         return __awaiter(this, void 0, void 0, function () {
-            var paymentMethod, billDestiny, bill, error_1;
+            var paymentMethod, billDestiny, bill, savedBill, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -68,8 +69,8 @@ var BillService = /** @class */ (function () {
                         });
                         return [4 /*yield*/, bill_1.default.create(bill)];
                     case 1:
-                        _a.sent();
-                        return [3 /*break*/, 3];
+                        savedBill = _a.sent();
+                        return [2 /*return*/, savedBill];
                     case 2:
                         error_1 = _a.sent();
                         throw new customError_1.default(error_1.message, 400, error_1.isOperational || false);
@@ -174,9 +175,34 @@ var BillService = /** @class */ (function () {
             });
         });
     };
-    BillService.prototype.updateValue = function (id, value) {
+    BillService.prototype.updateDescription = function (id, description) {
         return __awaiter(this, void 0, void 0, function () {
             var bill, error_6;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 3, , 4]);
+                        return [4 /*yield*/, bill_1.default.findById(id)];
+                    case 1:
+                        bill = _a.sent();
+                        if (!bill) {
+                            throw new customError_1.default("N\u00E3o foi encontrado nenhum lan\u00E7amento financeiro com o id " + id, 400, true);
+                        }
+                        return [4 /*yield*/, bill_1.default.updateOne({ _id: id }, { description: description })];
+                    case 2:
+                        _a.sent();
+                        return [3 /*break*/, 4];
+                    case 3:
+                        error_6 = _a.sent();
+                        throw new customError_1.default(error_6.message, 400, error_6.isOperational || false);
+                    case 4: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    BillService.prototype.updateValue = function (id, value) {
+        return __awaiter(this, void 0, void 0, function () {
+            var bill, error_7;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -195,16 +221,49 @@ var BillService = /** @class */ (function () {
                         _a.sent();
                         return [3 /*break*/, 4];
                     case 3:
-                        error_6 = _a.sent();
-                        throw new customError_1.default(error_6.message, 400, error_6.isOperational || false);
+                        error_7 = _a.sent();
+                        throw new customError_1.default(error_7.message, 400, error_7.isOperational || false);
                     case 4: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    BillService.prototype.cancel = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var bill, serviceOrder, error_8;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 4, , 5]);
+                        return [4 /*yield*/, bill_1.default.findById(id)];
+                    case 1:
+                        bill = _a.sent();
+                        if (!bill) {
+                            throw new customError_1.default('Não foi encontrado um lançamento financeiro com o ID informado', 400, true);
+                        }
+                        return [4 /*yield*/, serviceOrder_1.default.findOne().where('bill').equals(id)];
+                    case 2:
+                        serviceOrder = _a.sent();
+                        if (serviceOrder === null || !serviceOrder.isCanceled) {
+                            throw new customError_1.default('Este lançamento está vinculado à uma ordem de serviço. Para cancelá-lo cancele a ordem de serviço', 400, true);
+                        }
+                        bill.status = systemConstants_1.default.BillStatus_Cancelado;
+                        bill.cancelDate = new Date(Date.now());
+                        return [4 /*yield*/, bill.save()];
+                    case 3:
+                        _a.sent();
+                        return [3 /*break*/, 5];
+                    case 4:
+                        error_8 = _a.sent();
+                        throw new customError_1.default(error_8.message, 400, error_8.isOperational || false);
+                    case 5: return [2 /*return*/];
                 }
             });
         });
     };
     BillService.prototype.delete = function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var bill, error_7;
+            var bill, error_9;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -220,8 +279,8 @@ var BillService = /** @class */ (function () {
                         _a.sent();
                         return [3 /*break*/, 4];
                     case 3:
-                        error_7 = _a.sent();
-                        throw new customError_1.default(error_7.message, 400, error_7.isOperational || false);
+                        error_9 = _a.sent();
+                        throw new customError_1.default(error_9.message, 400, error_9.isOperational || false);
                     case 4: return [2 /*return*/];
                 }
             });
@@ -229,7 +288,7 @@ var BillService = /** @class */ (function () {
     };
     BillService.prototype.getAccountBalance = function (startDate, endDate) {
         return __awaiter(this, void 0, void 0, function () {
-            var billsList, incomingPending, outgoingPending, incomingPaid, outgoingPaid, totalIncomes, totalOutgoing, accountBalance, error_8;
+            var billsList, incomingPending, outgoingPending, incomingPaid, outgoingPaid, totalIncomes, totalOutgoing, accountBalance, error_10;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -257,8 +316,8 @@ var BillService = /** @class */ (function () {
                         };
                         return [2 /*return*/, accountBalance];
                     case 2:
-                        error_8 = _a.sent();
-                        throw new customError_1.default(error_8.message, 400, error_8.isOperational || false);
+                        error_10 = _a.sent();
+                        throw new customError_1.default(error_10.message, 400, error_10.isOperational || false);
                     case 3: return [2 /*return*/];
                 }
             });
@@ -269,7 +328,7 @@ var BillService = /** @class */ (function () {
      */
     BillService.prototype.MakeRetirement = function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var bill, error_9;
+            var bill, error_11;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -288,8 +347,8 @@ var BillService = /** @class */ (function () {
                         _a.sent();
                         return [3 /*break*/, 4];
                     case 3:
-                        error_9 = _a.sent();
-                        throw new customError_1.default(error_9.message, 400, error_9.isOperational || false);
+                        error_11 = _a.sent();
+                        throw new customError_1.default(error_11.message, 400, error_11.isOperational || false);
                     case 4: return [2 /*return*/];
                 }
             });

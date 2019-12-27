@@ -45,8 +45,11 @@ var utilsService_1 = __importDefault(require("../utils/utilsService"));
 var userService_1 = __importDefault(require("./userService"));
 var authMiddleware_1 = __importDefault(require("../middleware/authMiddleware"));
 var errorMiddleware_1 = __importDefault(require("../middleware/errorMiddleware"));
+// import { userValidationRules, handleValidationErrors } from './validators/userRegisterValidator';
+var userRegisterValitationSchema_1 = __importDefault(require("./validators/userRegisterValitationSchema"));
+var validationMiddleware_1 = __importDefault(require("../middleware/validationMiddleware"));
 var router = express_1.default.Router();
-router.post('/register', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+router.post('/register', validationMiddleware_1.default(userRegisterValitationSchema_1.default), function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var newUser, userService, user, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {

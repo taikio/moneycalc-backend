@@ -41,6 +41,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var serviceOrder_1 = __importDefault(require("./serviceOrder"));
 var customError_1 = __importDefault(require("../utils/customError"));
+var billService_1 = __importDefault(require("../bill/billService"));
+var customerService_1 = __importDefault(require("../customer/customerService"));
 var ServiceOrderService = /** @class */ (function () {
     function ServiceOrderService() {
     }
@@ -68,10 +70,125 @@ var ServiceOrderService = /** @class */ (function () {
             var serviceOrders;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, serviceOrder_1.default.find().populate('customer', 'name -_id')];
+                    case 0: return [4 /*yield*/, serviceOrder_1.default.find()
+                            .populate('customer', 'name -_id')
+                            .populate('bill', '-_id')];
                     case 1:
                         serviceOrders = _a.sent();
                         return [2 /*return*/, serviceOrders];
+                }
+            });
+        });
+    };
+    ServiceOrderService.prototype.GetServiceOrdersByDate = function (startDate, endDate) {
+        return __awaiter(this, void 0, void 0, function () {
+            var serviceOrders, error_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, serviceOrder_1.default.find()
+                                .where('createdAt').gte(startDate).lte(endDate)];
+                    case 1:
+                        serviceOrders = _a.sent();
+                        return [2 /*return*/, serviceOrders];
+                    case 2:
+                        error_2 = _a.sent();
+                        throw new customError_1.default(error_2.message, 400, error_2.isOperational || false);
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    ServiceOrderService.prototype.CancelServiceOrder = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var serviceOrder, billService, error_3;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 4, , 5]);
+                        return [4 /*yield*/, serviceOrder_1.default.findById(id)];
+                    case 1:
+                        serviceOrder = _a.sent();
+                        if (!serviceOrder) {
+                            throw new customError_1.default('Não existe uma ordem de serviço com o ID informado', 400, true);
+                        }
+                        if (serviceOrder.isCanceled) {
+                            throw new customError_1.default('A ordem de serviço já está cancelada', 400, true);
+                        }
+                        serviceOrder.cancelDate = new Date(Date.now());
+                        serviceOrder.isCanceled = true;
+                        return [4 /*yield*/, serviceOrder.save()];
+                    case 2:
+                        _a.sent();
+                        billService = new billService_1.default();
+                        return [4 /*yield*/, billService.cancel(serviceOrder.bill)];
+                    case 3:
+                        _a.sent();
+                        return [3 /*break*/, 5];
+                    case 4:
+                        error_3 = _a.sent();
+                        throw new customError_1.default(error_3.message, 400, error_3.isOperational || false);
+                    case 5: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    ServiceOrderService.prototype.changeCustomer = function (serviceOrderId, customerId) {
+        return __awaiter(this, void 0, void 0, function () {
+            var customerService, customer, serviceOrder, error_4;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 4, , 5]);
+                        customerService = new customerService_1.default();
+                        return [4 /*yield*/, customerService.getById(customerId)];
+                    case 1:
+                        customer = _a.sent();
+                        return [4 /*yield*/, serviceOrder_1.default.findById(serviceOrderId)];
+                    case 2:
+                        serviceOrder = _a.sent();
+                        if (!serviceOrder) {
+                            throw new customError_1.default('Não foi encontrada uma ordem de serviço com o ID informado', 400, true);
+                        }
+                        serviceOrder.customer = customer.id;
+                        return [4 /*yield*/, serviceOrder.save()];
+                    case 3:
+                        _a.sent();
+                        return [3 /*break*/, 5];
+                    case 4:
+                        error_4 = _a.sent();
+                        throw new customError_1.default(error_4.message, 400, error_4.isOperational || false);
+                    case 5: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    ServiceOrderService.prototype.changeDescription = function (id, description) {
+        return __awaiter(this, void 0, void 0, function () {
+            var serviceOrder, billService, error_5;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 4, , 5]);
+                        return [4 /*yield*/, serviceOrder_1.default.findById(id)];
+                    case 1:
+                        serviceOrder = _a.sent();
+                        if (!serviceOrder) {
+                            throw new customError_1.default('Não foi encontrada uma ordem de serviço com o ID informado', 400, true);
+                        }
+                        return [4 /*yield*/, serviceOrder_1.default.updateOne({ _id: id }, { description: description })];
+                    case 2:
+                        _a.sent();
+                        billService = new billService_1.default();
+                        return [4 /*yield*/, billService.updateDescription(serviceOrder.bill, description)];
+                    case 3:
+                        _a.sent();
+                        return [3 /*break*/, 5];
+                    case 4:
+                        error_5 = _a.sent();
+                        throw new customError_1.default(error_5.message, 400, error_5.isOperational || false);
+                    case 5: return [2 /*return*/];
                 }
             });
         });

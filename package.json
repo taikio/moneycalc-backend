@@ -8,7 +8,8 @@
     "dev": "nodemon src/www/server.ts",
     "debug": "nodemon --inspect src/www/server.ts",
     "build": "tsc",
-    "prod": "npm run build && node dist/www/server.js"
+    "prod": "npm run build && node dist/www/server.js",
+    "start": "node dest/www/server.js"
   },
   "jest": {
     "transform": {
@@ -39,13 +40,18 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "jest": "^24.9.0",
+    "joi": "^14.3.1",
     "jsonwebtoken": "^8.5.1",
     "linq": "^3.2.1",
     "mongoose": "^5.7.12",
     "nodemon": "^2.0.1",
+    "save": "^2.4.0",
     "supertest": "^4.0.2",
     "ts-jest": "^24.2.0",
     "ts-node": "^8.5.2",
     "typescript": "^3.7.2"
+  },
+  "devDependencies": {
+    "@types/joi": "^14.3.4"
   }
 }

@@ -4,13 +4,16 @@ import SvcUtils from '../utils/utilsService';
 import UserService from './userService';
 import authMiddleware from '../middleware/authMiddleware';
 import errorMiddleware from '../middleware/errorMiddleware';
-
+// import { userValidationRules, handleValidationErrors } from './validators/userRegisterValidator';
+import UserRegisterValidationSchema from './validators/userRegisterValitationSchema';
+import validationMiddleware from '../middleware/validationMiddleware';
 
 const router = express.Router();
 
-router.post('/register', async (req, res, next) => {
+router.post('/register', validationMiddleware(UserRegisterValidationSchema), async (req, res, next) => {
     
-    try {
+    try {        
+
         const newUser: IUser = new User({
             name: req.body.name,
             email: req.body.email,
@@ -62,6 +65,7 @@ router.post('/resetPassword', authMiddleware, async (req: any, res, next) => {
         return;
     }
 });
+
 
 router.use(errorMiddleware);
 

@@ -207,7 +207,7 @@ router.post('/Cancel/:id', function (req, res, next) { return __awaiter(void 0, 
                 _a.trys.push([0, 2, , 3]);
                 id = req.params.id;
                 billService = new billService_1.default();
-                return [4 /*yield*/, billService.delete(id)];
+                return [4 /*yield*/, billService.cancel(id)];
             case 1:
                 _a.sent();
                 return [2 /*return*/, res.send('Ok')];

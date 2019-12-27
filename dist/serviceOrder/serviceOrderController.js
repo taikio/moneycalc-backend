@@ -67,7 +67,7 @@ router.post('/New', function (req, res, next) { return __awaiter(void 0, void 0,
                 newServiceOrder = new serviceOrder_1.default({
                     description: req.body.Description,
                     customer: req.body.CustomerId,
-                    bill: savedBill
+                    bill: savedBill.id
                 });
                 serviceOrderService = new serviceOrderService_1.default();
                 return [4 /*yield*/, serviceOrderService.newServiceOrder(newServiceOrder)];
@@ -82,7 +82,7 @@ router.post('/New', function (req, res, next) { return __awaiter(void 0, void 0,
         }
     });
 }); });
-router.get('/', function (_req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+router.get('/GetList', function (_req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var service, serviceOrderList, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -96,6 +96,86 @@ router.get('/', function (_req, res, next) { return __awaiter(void 0, void 0, vo
             case 2:
                 error_2 = _a.sent();
                 next(error_2);
+                return [2 /*return*/];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); });
+router.get('/GetByDate', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, startDate, endDate, serviceOrderService, serviceOrderList, error_3;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _b.trys.push([0, 2, , 3]);
+                _a = req.query, startDate = _a.startDate, endDate = _a.endDate;
+                serviceOrderService = new serviceOrderService_1.default();
+                return [4 /*yield*/, serviceOrderService.GetServiceOrdersByDate(startDate, endDate)];
+            case 1:
+                serviceOrderList = _b.sent();
+                return [2 /*return*/, res.send({ serviceOrders: serviceOrderList })];
+            case 2:
+                error_3 = _b.sent();
+                next(error_3);
+                return [2 /*return*/];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); });
+router.post('/Cancel:id', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var id, serviceOrderService, error_4;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                id = req.params.id;
+                serviceOrderService = new serviceOrderService_1.default();
+                return [4 /*yield*/, serviceOrderService.CancelServiceOrder(id)];
+            case 1:
+                _a.sent();
+                return [2 /*return*/, res.send('ok')];
+            case 2:
+                error_4 = _a.sent();
+                next(error_4);
+                return [2 /*return*/];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); });
+router.put('/Customer', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, CustomerId, ServiceOrderId, serviceOrderService, error_5;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _b.trys.push([0, 2, , 3]);
+                _a = req.body, CustomerId = _a.CustomerId, ServiceOrderId = _a.ServiceOrderId;
+                serviceOrderService = new serviceOrderService_1.default();
+                return [4 /*yield*/, serviceOrderService.changeCustomer(ServiceOrderId, CustomerId)];
+            case 1:
+                _b.sent();
+                return [2 /*return*/, res.send('Ok')];
+            case 2:
+                error_5 = _b.sent();
+                next(error_5);
+                return [2 /*return*/];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); });
+router.put('/Description', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, ServiceOrderId, Description, serviceOrderService, error_6;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _b.trys.push([0, 2, , 3]);
+                _a = req.body, ServiceOrderId = _a.ServiceOrderId, Description = _a.Description;
+                serviceOrderService = new serviceOrderService_1.default();
+                return [4 /*yield*/, serviceOrderService.changeDescription(ServiceOrderId, Description)];
+            case 1:
+                _b.sent();
+                return [2 /*return*/, res.send('Ok')];
+            case 2:
+                error_6 = _b.sent();
+                next(error_6);
                 return [2 /*return*/];
             case 3: return [2 /*return*/];
         }

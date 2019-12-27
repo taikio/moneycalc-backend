@@ -212,6 +212,28 @@ var CustomerService = /** @class */ (function () {
             });
         });
     };
+    CustomerService.prototype.getById = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var customer, error_7;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, customer_1.default.findById(id)];
+                    case 1:
+                        customer = _a.sent();
+                        if (!customer) {
+                            throw new customError_1.default('Não foi encontrado um cliente com o ID informado', 400, true);
+                        }
+                        return [2 /*return*/, customer];
+                    case 2:
+                        error_7 = _a.sent();
+                        throw new customError_1.default(error_7.message, 400, error_7.isOperational || false);
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
     return CustomerService;
 }());
 exports.default = CustomerService;
