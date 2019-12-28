@@ -4,12 +4,17 @@ import errorMiddleware from '../middleware/errorMiddleware';
 import InputBillDto from './inputBillDto';
 import BillService from './billService';
 import SystemConstants from '../utils/systemConstants';
+import ValidationMiddleware from '../middleware/validationMiddleware';
+import NewBillValidationSchema from './validators/newBillValidationSchema';
+import DueDateValidationSchema from './validators/dueDateValidationSchema';
+import PaymentMethodValidationSchema from './validators/paymentMethodValidationSchema';
+import ValueValidationSchema from './validators/valueValidationSchema';
 
 const router = express.Router();
 
 router.use(authMiddleware);
 
-router.post('/NewPayable', async (req, res, next) => {
+router.post('/NewPayable', ValidationMiddleware(NewBillValidationSchema), async (req, res, next) => {
 
     try {
         
@@ -33,7 +38,7 @@ router.post('/NewPayable', async (req, res, next) => {
     }
 });
 
-router.post('/NewReceivable', async (req, res, next) => {
+router.post('/NewReceivable', ValidationMiddleware(NewBillValidationSchema), async (req, res, next) => {
 
     try {
         
@@ -86,7 +91,7 @@ router.get('/GetByDate', async (req, res, next) => {
     }
 });
 
-router.put('/PaymentMethod', async (req, res, next) => {
+router.put('/PaymentMethod', ValidationMiddleware(PaymentMethodValidationSchema), async (req, res, next) => {
 
     try {
         const { Id, PaymentMethodSysId } = req.body;
@@ -102,7 +107,7 @@ router.put('/PaymentMethod', async (req, res, next) => {
     }
 });
 
-router.put('/DueDate', async (req, res, next) => {
+router.put('/DueDate', ValidationMiddleware(DueDateValidationSchema), async (req, res, next) => {
 
     try {
         const { Id, DueDate } = req.body;
@@ -123,7 +128,7 @@ router.put('/DueDate', async (req, res, next) => {
     }
 });
 
-router.put('/Value', async (req, res, next) => {
+router.put('/Value', ValidationMiddleware(ValueValidationSchema), async (req, res, next) => {
 
     try {
         const { Id, Value } = req.body;

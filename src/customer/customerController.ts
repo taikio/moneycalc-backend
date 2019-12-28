@@ -3,18 +3,25 @@ import Customer, { ICustomer } from './customer';
 import CustomerService from './customerService';
 import authMiddleware from '../middleware/authMiddleware';
 import errorMiddleware from '../middleware/errorMiddleware';
+import validationMiddleware from '../middleware/validationMiddleware';
+import NewCustomerValidationSchema from './validators/newCustomerValidationSchema';
+import EmailValidationSchema from './validators/emailValidationSchema';
+import NameValidationSchema from './validators/nameValidationSchema';
+import ShortNameValidationSchema from './validators/shortNameValidationSchema';
+import CpfValidationSchema from './validators/cpfValidationSchema';
 
 const router = express.Router();
 
 router.use(authMiddleware);
 
-router.post('/', async (req, res, next) => {
+router.post('/', validationMiddleware(NewCustomerValidationSchema), async (req, res, next) => {
     
     try {
         const newCustomer: ICustomer = new Customer({
-            name: req.body.name,
-            shortName: req.body.shortName,
-            cpf: req.body.cpf,
+            name: req.body.Name,
+            shortName: req.body.ShortName,
+            cpf: req.body.Cpf,
+            email: req.body.Email
         });
 
         const customerService = new CustomerService();
@@ -44,7 +51,7 @@ router.get('/GetList', async (_req, res, next) => {
     }
 });
 
-router.put('/email', async (req, res, next) => {
+router.put('/email', validationMiddleware(EmailValidationSchema), async (req, res, next) => {
 
     try {
         const customerId = req.body.Id;
@@ -63,7 +70,7 @@ router.put('/email', async (req, res, next) => {
 
 });
 
-router.put('/name', async (req, res, next) => {
+router.put('/name', validationMiddleware(NameValidationSchema), async (req, res, next) => {
 
     try {
         const customerId = req.body.Id;
@@ -82,7 +89,7 @@ router.put('/name', async (req, res, next) => {
 
 });
 
-router.put('/shortName', async (req, res, next) => {
+router.put('/shortName', validationMiddleware(ShortNameValidationSchema), async (req, res, next) => {
 
     try {
         const customerId = req.body.Id;
@@ -101,7 +108,7 @@ router.put('/shortName', async (req, res, next) => {
 
 });
 
-router.put('/cpf', async (req, res, next) => {
+router.put('/cpf', validationMiddleware(CpfValidationSchema), async (req, res, next) => {
 
     try {
         const customerId = req.body.Id;
