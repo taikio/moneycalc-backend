@@ -40,7 +40,6 @@ export default class UserService {
              * configurada como 'select: false' na definição do Model
              */
             const user = await User.findOne({ email }).select('+password');
-            console.log(user);
             if (!user)
                 throw new CustomError('Usuário não encontrado!', 400, true);
 

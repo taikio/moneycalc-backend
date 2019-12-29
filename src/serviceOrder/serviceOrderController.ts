@@ -6,12 +6,16 @@ import errorMiddleware from '../middleware/errorMiddleware';
 import InputBillDto from '../bill/inputBillDto';
 import BillService from '../bill/billService';
 import SystemConstants from '../utils/systemConstants';
+import validationMiddleware from '../middleware/validationMiddleware';
+import NewServideOrderValidationSchema from './validators/newServiceOrderValidationSchema';
+import ServiceOrderCustomerValidationSchema from './validators/serviceOrderCustomerValidationSchema';
+import ServiceOrderDescriptionValidationSchema from './validators/serviceOrderDescriptionValidationSchema';
 
 const router = express.Router();
 
 router.use(authMiddleware);
 
-router.post('/New', async (req, res, next) => {
+router.post('/New', validationMiddleware(NewServideOrderValidationSchema), async (req, res, next) => {
 
     try {
 
@@ -85,7 +89,7 @@ router.post('/Cancel:id', async (req, res, next) => {
     }
 });
 
-router.put('/Customer', async (req, res, next) => {
+router.put('/Customer', validationMiddleware(ServiceOrderCustomerValidationSchema), async (req, res, next) => {
 
     try {
         const { CustomerId, ServiceOrderId } = req.body;
@@ -100,7 +104,7 @@ router.put('/Customer', async (req, res, next) => {
     }
 });
 
-router.put('/Description', async (req, res, next) => {
+router.put('/Description', validationMiddleware(ServiceOrderDescriptionValidationSchema), async (req, res, next) => {
 
     try {
         const { ServiceOrderId, Description } = req.body;
