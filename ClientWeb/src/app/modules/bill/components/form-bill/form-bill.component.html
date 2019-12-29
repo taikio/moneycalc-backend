@@ -1,0 +1,82 @@
+<div class="row">
+  <div class="col-sm-12">
+    <app-card cardTitle="Novo lançamento financeiro" [options]="false">
+      <form [formGroup]="billForm">
+        <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label for="exampleInputEmail1">Descrição</label>
+                <input type="text" class="form-control custom-input" aria-describedby="description" placeholder="Digite uma descrição"
+                  formControlName="description">
+              </div>
+            </div>            
+          </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="exampleFormControlSelect1">Meio de pagamento</label>
+              <ng-select id="exampleFormControlSelect1" [items]="paymentMethods | async" bindLabel="description"
+                bindValue="sysId" placeholder="Selecione" formControlName="paymentMethodSysId">
+              </ng-select>
+              <div class="invalid-feedback">
+                Selecione um meio de pagamento.
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label for="value">Valor</label>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon3">R$</span>
+              </div>
+              <input type="text" class="form-control custom-input" id="value" aria-describedby="value" formControlName="value" currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }">
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="exampleInputEmail1">Data de vencimento</label>
+              <div class="input-group">
+                <input class="form-control" placeholder="Informe a data de vencimento" name="dpStart"
+                  formControlName="dueDate" ngbDatepicker #dStart="ngbDatepicker" container="body" readonly>
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary" (click)="dStart.toggle()" type="button"><i
+                      class="feather icon-calendar"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="inputPassword3">Destino</label>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" formControlName="destiny" id="gridRadios1" value="R" checked>
+              <label class="form-check-label" for="gridRadios1">Conta a Receber</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" formControlName="destiny" id="gridRadios2" value="P">
+              <label class="form-check-label" for="gridRadios2">Conta a pagar</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="btn-toolbar">
+          <div class="btn-group perfect-margin">
+            <div class="input-group-append">
+              <button class="btn btn-primary" type="button" (click)="submmit(false)"><i class="feather icon-save"></i>
+                Gravar</button>
+            </div>
+          </div>
+          <div class="btn-group perfect-margin">
+            <div class="input-group-append">
+              <button class="btn btn-secondary" type="button" (click)="submmit(true)"><i class="feather icon-save"></i>
+                Gravar e continuar</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </app-card>
+  </div>
+</div>

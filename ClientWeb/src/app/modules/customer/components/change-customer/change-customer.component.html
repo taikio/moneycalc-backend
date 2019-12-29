@@ -1,0 +1,40 @@
+<div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title" *ngIf="type != 'cancel'">Alterar Cadastro de Cliente</h4>
+        <h4 class="modal-title" id="modal-basic-title" *ngIf="type == 'cancel'">Excluir Cliente</h4>
+        <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6" *ngIf="type == 'cancel'">
+            <p>Deseja realmente excluir esse client?</p>
+          </div>
+          <div class="col-md-12" *ngIf="type == 'name'">
+            <div class="form-group">
+              <label for="exampleInputEmail1">Nome</label>
+              <input type="email" class="form-control" aria-describedby="description" placeholder="Informe o nome"
+                [(ngModel)]="name">
+            </div>
+          </div>
+          <div class="col-md-12" *ngIf="type == 'shortname'">
+            <div class="form-group">
+              <label for="exampleInputEmail1">Nome Abreviado</label>
+              <input type="email" class="form-control" aria-describedby="description" placeholder="Informe o nome abreviado"
+                [(ngModel)]="shortname">
+            </div>
+          </div>
+          <div class="col-md-6" *ngIf="type == 'cpf'">
+            <div class="form-group">
+              <label for="exampleFormControlSelect1">Cpf</label>
+              <input type="number" class="form-control" aria-describedby="description" [(ngModel)]="cpf">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="save()" *ngIf="type != 'cancel'">Save</button>
+        <button type="button" class="btn btn-outline-danger" (click)="cancel()" *ngIf="type == 'cancel'">Sim,
+          Cancelar</button>
+      </div>
+      

@@ -1,0 +1,34 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title" *ngIf="type != 'cancel'">Alterar ordem de serviço</h4>
+  <h4 class="modal-title" id="modal-basic-title" *ngIf="type == 'cancel'">Cancelar ordem de serviço</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-md-6" *ngIf="type == 'cancel'">
+      <p>Deseja realmente cancelar esse lançamento?</p>
+    </div>
+    <div class="col-md-12" *ngIf="type == 'description'">
+      <div class="form-group">
+        <label for="exampleInputEmail1">Nova descrição</label>
+        <input type="email" class="form-control" aria-describedby="description" placeholder="Digite uma descrição"
+          [(ngModel)]="description">
+      </div>
+    </div>
+    <div class="col-md-6" *ngIf="type == 'customer'">
+      <div class="form-group">
+        <label for="exampleFormControlSelect1">Novo cliente</label>
+        <ng-select [items]="customers | async" bindLabel="name" bindValue="id" placeholder="Selecione"
+          [(ngModel)]="customerId">
+        </ng-select>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-dark" (click)="save()" *ngIf="type != 'cancel'">Save</button>
+  <button type="button" class="btn btn-outline-danger" (click)="cancel()" *ngIf="type == 'cancel'">Sim,
+    Cancelar</button>
+</div>

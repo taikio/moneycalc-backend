@@ -1,0 +1,88 @@
+<div class="row">
+  <div class="col-sm-12">
+    <app-card cardTitle="Pesquisar ordens de serviço" [options]="true">
+      <form [formGroup]="searchForm">
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="exampleInputEmail1">Data inicial</label>
+              <div class="input-group">
+                <input class="form-control" placeholder="Selecione a data inicial" name="dpStart"
+                  formControlName="startDate" ngbDatepicker #dStart="ngbDatepicker" container="body" readonly>
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary" (click)="dStart.toggle()" type="button"><i
+                      class="feather icon-calendar"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="exampleInputEmail1">Data final</label>
+              <div class="input-group">
+                <input class="form-control" placeholder="Selecione a data final" name="dp" formControlName="endDate"
+                  ngbDatepicker #dEnd="ngbDatepicker" container="body" readonly>
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary" (click)="dEnd.toggle()" type="button"><i
+                      class="feather icon-calendar"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="btn-toolbar" role="toolbar">
+          <div class="btn-group perfect-margin" role="group">
+            <button class="btn btn-primary" type="button" (click)="search()"><i class="feather icon-search"></i>
+              Pesquisar por data</button>
+          </div>
+          <!-- <div class="btn-group perfect-margin" role="group">
+            <button class="btn btn-secondary" type="button" (click)="search(true)"><i class="feather icon-search"></i>
+              Pesquisar todos</button>
+          </div> -->
+        </div>
+      </form>
+    </app-card>
+  </div>
+</div>
+
+<div class="row" *ngIf="(rowData | async)!= null">
+  <div class="col-sm-12">
+    <app-card cardTitle="Dados" [options]="false">
+
+      <div class="btn-toolbar">
+        <div class="btn-group perfect-margin">
+          <div ngbDropdown class="d-inline-block">
+            <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle><i
+                class="feather icon-edit"></i> Alterar ordem</button>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+              <button ngbDropdownItem (click)="open('customer')">Cliente</button>
+              <button ngbDropdownItem (click)="open('description')">Descrição</button>
+            </div>
+          </div>
+        </div>
+        <div class="btn-group perfect-margin">
+          <button class="btn btn-outline-danger" (click)="open('cancel')"><i class="feather icon-x-circle"></i> Cancelar
+            ordem</button>
+        </div>
+      </div>
+
+      <br>
+
+      <div class="row">
+        <ag-grid-angular 
+          style="width: 100%; min-height: 400px;" 
+          class="ag-theme-material" 
+          [rowData]="rowData | async"
+          [columnDefs]="columnDefs" 
+          [defaultColDef]="defaultColDef" 
+          [rowSelection]="rowSelection"
+          (rowSelected)="onRowSelected($event)"
+          [animateRows]=true
+          [enableColResize]=true>
+        </ag-grid-angular>
+      </div>
+    </app-card>
+  </div>
+</div>

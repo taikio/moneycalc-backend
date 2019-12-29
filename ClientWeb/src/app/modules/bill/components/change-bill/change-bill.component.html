@@ -1,0 +1,54 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title" *ngIf="type != 'cancel' && type != 'pay'">Alterar lançamento</h4>
+  <h4 class="modal-title" id="modal-basic-title" *ngIf="type == 'cancel'">Cancelar lançamento</h4>
+  <h4 class="modal-title" id="modal-basic-title" *ngIf="type == 'pay'">Baixar lançamento</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-md-6" *ngIf="type == 'cancel'">
+      <p>Deseja realmente cancelar esse lançamento?</p>
+    </div>
+    <div class="col-md-6" *ngIf="type == 'pay'">
+      <p>Deseja realmente dar baixa nesse lançamento?</p>
+    </div>
+    <div class="col-md-6" *ngIf="type == 'value'">
+      <div class="form-group">
+        <label for="exampleInputEmail1">Novo valor</label>
+        <input type="text" class="form-control" aria-describedby="valor" [(ngModel)]="value" currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }">
+      </div>
+    </div>
+    <div class="col-md-6" *ngIf="type == 'duedate'">
+      <div class="form-group">
+        <label for="exampleInputEmail1">Nova data de vencimento</label>
+        <!-- <input type="date" class="form-control" aria-describedby="description" placeholder="Digite uma descrição"
+          [(ngModel)]="duedate"> -->
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Informe a data de vencimento" [(ngModel)]="dueDate" ngbDatepicker #dStart="ngbDatepicker" container="body">
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary" (click)="dStart.toggle()" type="button"><i
+                  class="feather icon-calendar"></i></button>
+            </div>
+          </div>
+
+      </div>
+    </div>
+    <div class="col-md-6" *ngIf="type == 'payment'">
+      <div class="form-group">
+        <label for="exampleFormControlSelect1">Novo meio de pagamento</label>
+        <ng-select [items]="customers | async" bindLabel="name" bindValue="id" placeholder="Selecione"
+          [(ngModel)]="paymentId">
+        </ng-select>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-dark" (click)="save()"
+    *ngIf="type != 'cancel' && type != 'pay'">Alterar</button>
+  <button type="button" class="btn btn-outline-danger" (click)="cancel()" *ngIf="type == 'cancel'">Sim,
+    Cancelar</button>
+  <button type="button" class="btn btn-outline-warning" (click)="pay()" *ngIf="type == 'pay'">Sim, baixar</button>
+</div>

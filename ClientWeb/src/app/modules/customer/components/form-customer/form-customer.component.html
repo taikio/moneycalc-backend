@@ -1,0 +1,58 @@
+<div class="row">
+  <div class="col-sm-12">
+    <app-card cardTitle="Novo lançamento financeiro" [options]="false">
+      <form [formGroup]="customerForm">
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="name">Nome</label>
+              <input type="text" class="form-control custom-input" aria-describedby="name" placeholder="Nome do cliente"
+                formControlName="name">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="shortName">Nome Abreviado</label>
+              <input type="text" class="form-control custom-input" aria-describedby="shortName" placeholder="Nome curto"
+                formControlName="shortName">
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="cpf">CPF (somente números)</label>
+              <input type="number" class="form-control custom-input" aria-describedby="cpf" placeholder="CPF (somente números)"
+                formControlName="cpf">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" class="form-control custom-input" aria-describedby="email" placeholder="Digite o email"
+                formControlName="email">
+            </div>
+          </div>
+        </div>
+
+        <div class="btn-toolbar">
+          <div class="btn-group perfect-margin">
+            <div class="input-group-append">
+              <button class="btn btn-primary" type="button" (click)="submmit(false)"><i class="feather icon-save"></i>
+                Gravar</button>
+            </div>
+          </div>
+          <div class="btn-group perfect-margin">
+            <div class="input-group-append">
+              <button class="btn btn-secondary" type="button" (click)="submmit(true)"><i class="feather icon-save"></i>
+                Gravar e continuar</button>
+            </div>
+          </div>
+        </div>
+
+      </form>
+    </app-card>
+  </div>
+</div>
