@@ -60,17 +60,18 @@ export class AuthService {
   }
 
   public login(username: string, password: string): Observable<UserToken> {
-    const body = `grant_type=password&username=${username}&password=${password}`;
-    const request = this.httpHelper.post('/connect/token', body, true) as Observable<AuthToken>;
+    // const body = `grant_type=password&username=${username}&password=${password}`;
+    const body = { email: username, password: password };
+    const request = this.httpHelper.post('/users/token', body, false) as Observable<any>;
 
     return request.pipe(
       map((token) => {
-
+        console.log('auth return', token);
         const user: UserToken = {
           username,
           password,
           token: {
-            access_token: token.access_token
+            access_token: token
           }
         };
 

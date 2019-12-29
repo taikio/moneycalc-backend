@@ -7,6 +7,7 @@ import lookupsController from './lookups/lookupsController';
 import billController from './bill/billController';
 import path from 'path';
 import ejs from 'ejs';
+import cors from 'cors';
 
 const app = express();
 
@@ -17,15 +18,16 @@ app.set('views', path.join(__dirname, 'views'));
 app.engine('html', ejs.renderFile);
 app.set('view engine', 'html');
 
-app.use(express.static(__dirname + '/public'))
+app.use(express.static(__dirname + '/public'));
+app.use(cors());
 
 /* Habilitando cross origin */
-app.all('*', function(_req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
-    next();
-});
+// app.all('*', function(_req, res, next) {
+//     res.header('Access-Control-Allow-Origin', '*');
+//     res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+//     res.header('Access-Control-Allow-Headers', 'Content-Type');
+//     next();
+// });
 
 // ============ Rotas ===============
 app.use('/users', userController);

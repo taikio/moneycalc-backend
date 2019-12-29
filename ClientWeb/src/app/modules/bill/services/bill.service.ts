@@ -48,14 +48,14 @@ export class BillService {
 
   public new(bill: NewBillDto) {
     if (bill.destiny === 'P') {
-      return this.httpHelper.post('/Bills/NewPayable', bill);
+      return this.httpHelper.post('/api/Bills/NewPayable', bill);
     } else {
-      return this.httpHelper.post('/Bills/NewReceivable', bill);
+      return this.httpHelper.post('/api/Bills/NewReceivable', bill);
     }
   }
 
   public getByDate(startDate: string, endDate: string, destiny: 'R' | 'P'): Observable<Bill> {
-    return this.httpHelper.get('/Bills/GetByDate', {
+    return this.httpHelper.get('/api/Bills/GetByDate', {
       startDate,
       endDate,
       destiny
@@ -63,35 +63,35 @@ export class BillService {
   }
 
   public AccountBalance(startDate: string, endDate: string) {
-    return this.httpHelper.get('/Bills/AccountBalance', {
+    return this.httpHelper.get('/api/Bills/AccountBalance', {
       startDate,
       endDate,
     }) as Observable<AccountBalance>;
   }
 
   public changePaymentMethod(id: string, paymentMethodSysId: string) {
-    return this.httpHelper.put('/Bills/PaymentMethod', {
+    return this.httpHelper.put('/api/Bills/PaymentMethod', {
       id, paymentMethodSysId
     });
   }
 
   public changeDueDate(id: string, dueDate: string) {
-    return this.httpHelper.put('/Bills/DueDate', {
+    return this.httpHelper.put('/api/Bills/DueDate', {
       id, dueDate
     });
   }
 
   public changeValue(id: string, value: number) {
-    return this.httpHelper.put('/Bills/Value', {
+    return this.httpHelper.put('/api/Bills/Value', {
       id, value
     });
   }
 
   public cancel(id: string) {
-    return this.httpHelper.post(`/Bills/Cancel/${id}`, null);
+    return this.httpHelper.post(`/api/Bills/Cancel/${id}`, null);
   }
 
   public makeRetirement(id: string) {
-    return this.httpHelper.put(`/Bills/MakeRetirement/${id}`, null);
+    return this.httpHelper.put(`/api/Bills/MakeRetirement/${id}`, null);
   }
 }
