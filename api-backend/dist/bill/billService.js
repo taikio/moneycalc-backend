@@ -109,6 +109,11 @@ var BillService = /** @class */ (function () {
                                 .where('destiny').equals(destiny)];
                     case 1:
                         billsList = _a.sent();
+                        billsList.forEach(function (bill) {
+                            if (bill.dueDate < new Date(Date.now())) {
+                                bill.status = systemConstants_1.default.BillStatus_Vencido;
+                            }
+                        });
                         return [2 /*return*/, billsList];
                     case 2:
                         error_3 = _a.sent();
@@ -303,16 +308,16 @@ var BillService = /** @class */ (function () {
                         totalIncomes = linq_1.default.from(billsList).where(function (x) { return x.destiny === systemConstants_1.default.BillDestinyReceive; });
                         totalOutgoing = linq_1.default.from(billsList).where(function (x) { return x.destiny === systemConstants_1.default.BillDestinyPay; });
                         accountBalance = {
-                            IncomingPendingQuantity: incomingPending.count(),
-                            IncomingPendingValue: incomingPending.sum(function (x) { return x.value; }),
-                            IncomingPaidQuantity: incomingPaid.count(),
-                            IncomingPaidValue: incomingPaid.sum(function (x) { return x.value; }),
-                            OutgoingPendingQuantity: outgoingPending.count(),
-                            OutgoingPendingValue: outgoingPending.sum(function (x) { return x.value; }),
-                            OutgoingPaidQuantity: outgoingPaid.sum(),
-                            OutgoingPaidValue: outgoingPaid.sum(function (x) { return x.value; }),
-                            IncomingOutgoingBalance: incomingPaid.sum(function (x) { return x.value; }) - outgoingPaid.sum(function (x) { return x.value; }),
-                            IncomingOutgoingProjection: totalIncomes.sum(function (x) { return x.value; }) - totalOutgoing.sum(function (x) { return x.value; })
+                            incomingPendingQuantity: incomingPending.count(),
+                            incomingPendingValue: incomingPending.sum(function (x) { return x.value; }),
+                            incomingPaidQuantity: incomingPaid.count(),
+                            incomingPaidValue: incomingPaid.sum(function (x) { return x.value; }),
+                            outgoingPendingQuantity: outgoingPending.count(),
+                            outgoingPendingValue: outgoingPending.sum(function (x) { return x.value; }),
+                            outgoingPaidQuantity: outgoingPaid.sum(),
+                            outgoingPaidValue: outgoingPaid.sum(function (x) { return x.value; }),
+                            incomingOutgoingBalance: incomingPaid.sum(function (x) { return x.value; }) - outgoingPaid.sum(function (x) { return x.value; }),
+                            incomingOutgoingProjection: totalIncomes.sum(function (x) { return x.value; }) - totalOutgoing.sum(function (x) { return x.value; })
                         };
                         return [2 /*return*/, accountBalance];
                     case 2:

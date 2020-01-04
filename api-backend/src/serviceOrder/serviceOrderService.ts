@@ -20,7 +20,7 @@ export default class ServiceOrderService {
 
     public async getAll(): Promise<IServiceOrder[]> {
         const serviceOrders = await ServiceOrder.find()
-        .populate('customer', 'name -_id')
+        .populate('customer', '-_id')
         .populate('bill', '-_id');
 
         return serviceOrders;
@@ -29,8 +29,14 @@ export default class ServiceOrderService {
     public async GetServiceOrdersByDate(startDate: Date, endDate: Date): Promise<IServiceOrder[]> {
 
         try {
-            const serviceOrders = await ServiceOrder.find()
-            .where('createdAt').gte(startDate).lte(endDate);
+            const serviceOrders = await ServiceOrder.find()            
+            .where('createdAt').gte(startDate).lte(endDate)
+            .populate('customer', '-_id')
+            .populate('bill', '-_id').exec();
+
+            // serviceOrders.forEach( element => {
+            //     element.bill.value = parseFloat(element.bill.value);
+            // });
 
             return serviceOrders;
         } catch(error) {

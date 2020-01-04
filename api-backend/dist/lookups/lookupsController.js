@@ -52,9 +52,7 @@ router.get('/GetPaymentMethods', function (_req, res, next) { return __awaiter(v
         try {
             lookupsService = new lookupsService_1.default();
             listReturn = lookupsService.getPaymentMethods();
-            return [2 /*return*/, res.send({
-                    paymentMethods: listReturn
-                })];
+            return [2 /*return*/, res.send(listReturn)];
         }
         catch (error) {
             next(error);
@@ -73,7 +71,7 @@ router.get('/GetCustomers', function (_req, res, next) { return __awaiter(void 0
                 return [4 /*yield*/, service.getAll()];
             case 1:
                 customersList = _a.sent();
-                return [2 /*return*/, res.send({ customers: customersList })];
+                return [2 /*return*/, res.send(customersList)];
             case 2:
                 error_1 = _a.sent();
                 next(error_1);

@@ -34,6 +34,7 @@ export class NavBarComponent implements OnInit {
       this.onNavCollapse.emit();
     } else {
       this.onNavHeaderMobCollapse.emit();
+      console.log('click mobile menu');
     }
   }
 

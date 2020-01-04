@@ -18,10 +18,10 @@ router.post('/', validationMiddleware(NewCustomerValidationSchema), async (req, 
     
     try {
         const newCustomer: ICustomer = new Customer({
-            name: req.body.Name,
-            shortName: req.body.ShortName,
-            cpf: req.body.Cpf,
-            email: req.body.Email
+            name: req.body.name,
+            shortName: req.body.shortName,
+            cpf: req.body.cpf,
+            email: req.body.email
         });
 
         const customerService = new CustomerService();
@@ -44,7 +44,7 @@ router.get('/GetList', async (_req, res, next) => {
         const customerService = new CustomerService();
         const customersList = await customerService.getAll();
 
-        return res.send({ customers: customersList });
+        return res.send(customersList);
     } catch(error) {
         next(error);
         return;
@@ -54,15 +54,15 @@ router.get('/GetList', async (_req, res, next) => {
 router.put('/email', validationMiddleware(EmailValidationSchema), async (req, res, next) => {
 
     try {
-        const customerId = req.body.Id;
-        const email = req.body.Email;
+        const customerId = req.body.id;
+        const email = req.body.email;
         console.log('customer id', customerId);
         console.log('customer email', email);
 
         const customerService = new CustomerService();
         await customerService.changeCustomerEmail(customerId, email);
 
-        res.send('Ok');
+        res.status(200).send();
     } catch(error) {
         next(error);
         return;
@@ -73,15 +73,15 @@ router.put('/email', validationMiddleware(EmailValidationSchema), async (req, re
 router.put('/name', validationMiddleware(NameValidationSchema), async (req, res, next) => {
 
     try {
-        const customerId = req.body.Id;
-        const name = req.body.Name;
+        const customerId = req.body.id;
+        const name = req.body.name;
         console.log('customer id', customerId);
         console.log('customer email', name);
 
         const customerService = new CustomerService();
         await customerService.changeCustomerName(customerId, name);
 
-        res.send('Ok');
+        res.status(200).send();
     } catch(error) {
         next(error);
         return;
@@ -92,15 +92,15 @@ router.put('/name', validationMiddleware(NameValidationSchema), async (req, res,
 router.put('/shortName', validationMiddleware(ShortNameValidationSchema), async (req, res, next) => {
 
     try {
-        const customerId = req.body.Id;
-        const name = req.body.ShortName;
+        const customerId = req.body.id;
+        const name = req.body.shortName;
         console.log('customer id', customerId);
         console.log('customer email', name);
 
         const customerService = new CustomerService();
         await customerService.changeCustomerShortName(customerId, name);
 
-        res.send('Ok');
+        res.status(200).send();
     } catch(error) {
         next(error);
         return;
@@ -111,15 +111,15 @@ router.put('/shortName', validationMiddleware(ShortNameValidationSchema), async 
 router.put('/cpf', validationMiddleware(CpfValidationSchema), async (req, res, next) => {
 
     try {
-        const customerId = req.body.Id;
-        const cpf = req.body.Cpf;
+        const customerId = req.body.id;
+        const cpf = req.body.cpf;
         console.log('customer id', customerId);
         console.log('customer email', cpf);
 
         const customerService = new CustomerService();
         await customerService.changeCustomerCpf(customerId, cpf);
 
-        res.send('Ok');
+        res.status(200).send();
     } catch(error) {
         next(error);
         return;
@@ -130,12 +130,12 @@ router.put('/cpf', validationMiddleware(CpfValidationSchema), async (req, res, n
 router.post('/cancel', async (req, res, next) => {
 
     try {
-        const customerId = req.params.Id;
+        const customerId = req.params.id;
         
         const customerService = new CustomerService();
         await customerService.delete(customerId);
 
-        res.send('Ok');
+        res.status(200).send();
     } catch(error) {
         next(error);
         return;

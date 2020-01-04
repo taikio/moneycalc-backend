@@ -35,11 +35,11 @@ export class QueryCustomersComponent implements OnInit, OnDestroy {
   rowSelection;
 
   columnDefs = [
-    { headerName: 'ID Cliente', field: 'id', sortable: true, filter: true },
+    { headerName: 'ID Cliente', field: '_id', sortable: true, filter: true },
     { headerName: 'Nome', field: 'name', sortable: true, filter: true },
-    { headerName: 'Nome curto', field: 'shortName', sortable: true, filter: true },
-    { headerName: 'CPF', field: 'cpf', sortable: true, filter: true, valueFormatter: this.agGridHelper.cpfFormatter },
-    { headerName: 'Email', field: 'email', sortable: true, filter: true },
+    { headerName: 'Nome Abreviado', field: 'shortName', sortable: true, filter: true }
+    // { headerName: 'CPF', field: 'cpf', sortable: true, filter: true, valueFormatter: this.agGridHelper.cpfFormatter },
+    // { headerName: 'Email', field: 'email', sortable: true, filter: true },
   ];
 
   getCustomers() {
@@ -58,10 +58,10 @@ export class QueryCustomersComponent implements OnInit, OnDestroy {
       Swal.fire('Opps...', 'Nenhum registro selecionado!', 'warning');
       return;
     }
-    console.log('edit', this.selectedRow.id);
+    console.log('edit', this.selectedRow._id);
     const modalRef = this.modalService.open(ChangeCustomerComponent);
     modalRef.componentInstance.type = type;
-    modalRef.componentInstance.idCustomer = this.selectedRow.id;
+    modalRef.componentInstance.idCustomer = this.selectedRow._id;
 
     modalRef.result.then(() => {
       this.getCustomers();

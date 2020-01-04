@@ -104,7 +104,7 @@ export class AuthInterceptor implements HttpInterceptor {
     // }
 
     return request.clone({
-      headers: request.headers.set(this.AUTH_HEADER, 'Bearer ' + this.auth.getCurrentUser().token.access_token)
+      headers: request.headers.set(this.AUTH_HEADER, 'Bearer ' + this.auth.getCurrentUser().token)
     });
   }
 }

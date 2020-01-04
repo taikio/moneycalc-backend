@@ -54,6 +54,7 @@ export class FormBillComponent implements OnInit, OnDestroy {
     }
 
     const newService = this.billForm.value as NewBillDto;
+    console.log('bill form value', this.billForm.value)
     newService.dueDate = this.getStringDateFromNgbDate(this.billForm.value.dueDate);
 
     this.subscriptions.push(

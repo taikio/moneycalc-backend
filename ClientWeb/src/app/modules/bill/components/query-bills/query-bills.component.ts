@@ -37,11 +37,11 @@ export class QueryBillsComponent implements OnInit, OnDestroy {
   private rowSelection;
 
   columnDefs = [
-    { headerName: 'ID Lançamento', field: 'id', sortable: true, filter: true },
-    { headerName: 'Meio de Pagamento', field: 'paymentMethod.description', sortable: true, filter: true },
+    { headerName: 'ID Lançamento', field: '_id', sortable: true, filter: true },
+    { headerName: 'Meio de Pagamento', field: 'paymentMethod.Description', sortable: true, filter: true },
     { headerName: 'Valor R$', field: 'value', sortable: true, filter: true, valueFormatter: this.agGridHelper.currencyFormatter },
     { headerName: 'Destino', field: 'destiny', sortable: true, filter: true },
-    { headerName: 'Status', field: 'computedStatus', sortable: true, filter: true },
+    { headerName: 'Status', field: 'status', sortable: true, filter: true },
     { headerName: 'Descrição', field: 'description', sortable: true, filter: false },
     {
       headerName: 'Pago?', field: 'paid', sortable: true, filter: true, cellRenderer: params => {
@@ -52,7 +52,7 @@ export class QueryBillsComponent implements OnInit, OnDestroy {
       headerName: 'Dt. Vencimento', field: 'dueDate', sortable: true, filter: true, valueFormatter: this.agGridHelper.dateFormatter
     },
     {
-      headerName: 'Dt. Pagamento', field: 'payDate', sortable: true, filter: true, valueFormatter: this.agGridHelper.dateFormatter
+      headerName: 'Dt. Pagamento', field: 'payDay', sortable: true, filter: true, valueFormatter: this.agGridHelper.dateFormatter
     },
     { headerName: 'Dt. Reversão', field: 'reversalDate', sortable: true, filter: true },
     {
@@ -103,7 +103,7 @@ export class QueryBillsComponent implements OnInit, OnDestroy {
 
     const modalRef = this.modalService.open(ChangeBillComponent);
     modalRef.componentInstance.type = type;
-    modalRef.componentInstance.idBill = this.selectedRow.id;
+    modalRef.componentInstance.idBill = this.selectedRow._id;
 
     modalRef.result.then(() => {
       this.search();

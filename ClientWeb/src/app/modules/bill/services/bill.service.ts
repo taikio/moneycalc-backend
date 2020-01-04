@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 
 
 export interface Bill {
-  id: string;
+  _id: string;
   paymentMethod: PaymentMethod;
   value: number;
   destiny: 'R' | 'P';
@@ -71,19 +71,22 @@ export class BillService {
 
   public changePaymentMethod(id: string, paymentMethodSysId: string) {
     return this.httpHelper.put('/api/Bills/PaymentMethod', {
-      id, paymentMethodSysId
+      id, 
+      paymentMethodSysId
     });
   }
 
   public changeDueDate(id: string, dueDate: string) {
     return this.httpHelper.put('/api/Bills/DueDate', {
-      id, dueDate
+      id, 
+      dueDate
     });
   }
 
   public changeValue(id: string, value: number) {
     return this.httpHelper.put('/api/Bills/Value', {
-      id, value
+      id, 
+      value
     });
   }
 

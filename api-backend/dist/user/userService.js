@@ -88,7 +88,6 @@ var UserService = /** @class */ (function () {
                         return [4 /*yield*/, user_1.default.findOne({ email: email }).select('+password')];
                     case 1:
                         user = _a.sent();
-                        console.log(user);
                         if (!user)
                             throw new customError_1.default('Usuário não encontrado!', 400, true);
                         return [4 /*yield*/, bcryptjs_1.default.compare(password, user.password)];
@@ -129,6 +128,32 @@ var UserService = /** @class */ (function () {
                         error_3 = _a.sent();
                         throw new customError_1.default(error_3.message, 400, error_3.isOperational || false);
                     case 6: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    UserService.prototype.getByid = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var loggedUser, outputUser, error_4;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, user_1.default.findById(id)];
+                    case 1:
+                        loggedUser = _a.sent();
+                        if (loggedUser === null)
+                            throw new customError_1.default('Não foi possível obter informações do usuário', 400, true);
+                        outputUser = {
+                            id: loggedUser.id,
+                            firstName: loggedUser.name,
+                            email: loggedUser.email
+                        };
+                        return [2 /*return*/, outputUser];
+                    case 2:
+                        error_4 = _a.sent();
+                        throw new customError_1.default(error_4.message, 400, error_4.isOperational || false);
+                    case 3: return [2 /*return*/];
                 }
             });
         });

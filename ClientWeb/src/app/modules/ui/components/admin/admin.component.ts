@@ -30,12 +30,13 @@ export class AdminComponent implements OnInit {
       this.gradientConfig.collapseMenu = true;
     }
 
-    this.navCollapsed = (this.windowWidth >= 992) ? this.gradientConfig.collapseMenu : false;
-    this.navCollapsedMob = false;
+    this.navCollapsed = (this.windowWidth >= 992) ? this.gradientConfig.collapseMenu : false;    
 
   }
 
   ngOnInit() {
+    this.navCollapsedMob = false;
+    
     if (this.windowWidth < 992) {
       this.gradientConfig.layout = 'vertical';
       setTimeout(() => {
@@ -46,16 +47,20 @@ export class AdminComponent implements OnInit {
   }
 
   navMobClick() {
-    if (this.windowWidth < 992) {
-      if (this.navCollapsedMob && !(document.querySelector('app-navigation.pcoded-navbar').classList.contains('mob-open'))) {
-        this.navCollapsedMob = !this.navCollapsedMob;
-        setTimeout(() => {
-          this.navCollapsedMob = !this.navCollapsedMob;
-        }, 100);
-      } else {
-        this.navCollapsedMob = !this.navCollapsedMob;
-      }
+    // if (this.windowWidth < 992) {
+    //   if (this.navCollapsedMob && !(document.querySelector('app-navigation.pcoded-navbar').classList.contains('mob-open'))) {
+    //     this.navCollapsedMob = !this.navCollapsedMob;
+    //     setTimeout(() => {
+    //       this.navCollapsedMob = !this.navCollapsedMob;
+    //     }, 100);
+    //   } else {
+    //     this.navCollapsedMob = !this.navCollapsedMob;
+    //   }
+    // }
+    if (this.windowWidth <= 992) {
+      this.navCollapsedMob = !this.navCollapsedMob;
     }
+    console.log('click mobile menu');
   }
 
 }

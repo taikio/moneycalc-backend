@@ -49,7 +49,7 @@ export class FormServiceOrderComponent implements OnInit, OnDestroy {
   }
 
   submmit(continueForm: boolean = false) {
-
+    console.log('formulario', this.serviceOrderForm.value);
     if (!this.serviceOrderForm.valid) {
       Swal.fire('Atenção...', 'Preencha todos os campos do formulario!', 'warning');
       return;

@@ -23,10 +23,10 @@ export class LookupService {
   constructor(private httpHelper: HttpHelperService) { }
 
   public getPaymentMethod() {
-    return this.httpHelper.get('/Lookups/GetPaymentMethods');
+    return this.httpHelper.get('/api/Lookups/GetPaymentMethods');
   }
 
   public getCustomers() {
-    return this.httpHelper.get('/Lookups/GetCustomers');
+    return this.httpHelper.get('/api/Lookups/GetCustomers');
   }
 }

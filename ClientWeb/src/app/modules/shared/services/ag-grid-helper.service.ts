@@ -10,6 +10,7 @@ export class AgGridHelperService {
   }
 
   public currencyFormatter(params) {
+    console.log('currency formatter', params);
     return 'R$ ' + (params.value as number).toLocaleString('pt');
   }
 

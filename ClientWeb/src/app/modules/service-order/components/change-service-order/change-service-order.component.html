@@ -20,7 +20,7 @@
     <div class="col-md-6" *ngIf="type == 'customer'">
       <div class="form-group">
         <label for="exampleFormControlSelect1">Novo cliente</label>
-        <ng-select [items]="customers | async" bindLabel="name" bindValue="id" placeholder="Selecione"
+        <ng-select [items]="customers | async" bindLabel="shortName" bindValue="_id" placeholder="Selecione"
           [(ngModel)]="customerId">
         </ng-select>
       </div>

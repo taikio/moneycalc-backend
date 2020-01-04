@@ -19,7 +19,6 @@ var validationMiddleware = function (schema, property) {
                 error = joi_1.default.validate(req.body, schema).error;
                 break;
         }
-        // const { error } = Joi.validate(req.body, schema);
         if (error == null) {
             next();
         }

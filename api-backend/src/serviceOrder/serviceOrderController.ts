@@ -20,25 +20,25 @@ router.post('/New', validationMiddleware(NewServideOrderValidationSchema), async
     try {
 
         const bill: InputBillDto = {
-            Description: req.body.Description,
-            PaymentMethodSysId: req.body.PaymentMethodSysId,
-            Value: req.body.Value,
-            DueDate: req.body.DueDate
+            Description: req.body.description,
+            PaymentMethodSysId: req.body.paymentMethodSysId,
+            Value: req.body.value,
+            DueDate: req.body.dueDate
         };
 
         const billService = new BillService();
         const savedBill = await billService.newBill(bill, SystemConstants.BillDestinyReceive);
 
         const newServiceOrder: IServiceOrder = new ServiceOrder({
-            description: req.body.Description,
-            customer: req.body.CustomerId,
+            description: req.body.description,
+            customer: req.body.customerId,
             bill: savedBill.id
         });
 
         const serviceOrderService = new ServiceOrderService();        
         await serviceOrderService.newServiceOrder(newServiceOrder);
 
-        return res.send('Ok');
+        return res.status(200).send();
     } catch(error) {
         next(error);
         return;
@@ -51,7 +51,7 @@ router.get('/GetList', async (_req, res, next) => {
         const service = new ServiceOrderService();
         const serviceOrderList = await service.getAll();
 
-        return res.send({ serviceOrders: serviceOrderList });
+        return res.send(serviceOrderList);
     } catch(error) {
         next(error);
         return;
@@ -67,7 +67,7 @@ router.get('/GetByDate', async (req, res, next) => {
 
         const serviceOrderList = await serviceOrderService.GetServiceOrdersByDate(startDate, endDate);
 
-        return res.send({ serviceOrders: serviceOrderList });
+        return res.send(serviceOrderList);
     } catch(error) {
         next(error);
         return;
@@ -82,7 +82,7 @@ router.post('/Cancel:id', async (req, res, next) => {
         const serviceOrderService = new ServiceOrderService();
         await serviceOrderService.CancelServiceOrder(id);
 
-        return res.send('ok');
+        return res.status(200).send();
     } catch(error) {
         next(error);
         return;
@@ -92,12 +92,12 @@ router.post('/Cancel:id', async (req, res, next) => {
 router.put('/Customer', validationMiddleware(ServiceOrderCustomerValidationSchema), async (req, res, next) => {
 
     try {
-        const { CustomerId, ServiceOrderId } = req.body;
+        const { customerId, id } = req.body;
 
         const serviceOrderService = new ServiceOrderService();
-        await serviceOrderService.changeCustomer(ServiceOrderId, CustomerId);
+        await serviceOrderService.changeCustomer(id, customerId);
 
-        return res.send('Ok');
+        return res.status(200).send();
     } catch(error) {
         next(error);
         return;
@@ -107,12 +107,12 @@ router.put('/Customer', validationMiddleware(ServiceOrderCustomerValidationSchem
 router.put('/Description', validationMiddleware(ServiceOrderDescriptionValidationSchema), async (req, res, next) => {
 
     try {
-        const { ServiceOrderId, Description } = req.body;
+        const { id, description } = req.body;
 
         const serviceOrderService = new ServiceOrderService();
-        await serviceOrderService.changeDescription(ServiceOrderId, Description);
+        await serviceOrderService.changeDescription(id, description);
 
-        return res.send('Ok');
+        return res.status(200).send();
     } catch(error) {
         next(error);
         return;

@@ -4,41 +4,41 @@ export default interface OutputAccountBalanceDto {
     /**
      * Quantidade de contas a receber pendentes
      */
-    IncomingPendingQuantity: number;
+    incomingPendingQuantity: number;
     /**
      * Quantidade de contas a pagar pendentes
      */
-    OutgoingPendingQuantity: number;
+    outgoingPendingQuantity: number;
     /**
      * Quantidade de contas a receber pagas
      */
-    IncomingPaidQuantity: number;
+    incomingPaidQuantity: number;
     /**
      * Quantidade de contas a pagar pagas
      */
-    OutgoingPaidQuantity: number;
+    outgoingPaidQuantity: number;
     /**
      * Valor total de contas a receber pendentes
      */
-    IncomingPendingValue: number;
+    incomingPendingValue: number;
     /**
      * Valor total de contas a pagar pendentes
      */
-    OutgoingPendingValue: number;
+    outgoingPendingValue: number;
     /**
      * Valor total de contas a receber pagas
      */
-    IncomingPaidValue: number;
+    incomingPaidValue: number;
     /**
      * Valor total de contas a pagar pagas
      */
-    OutgoingPaidValue: number;
+    outgoingPaidValue: number;
     /**
      * Balanço entre contas a receber - contas a pagar que já foram pagas
      */
-    IncomingOutgoingBalance: number;
+    incomingOutgoingBalance: number;
     /**
      * Uma projeção somando todas as contas a receber - todas as contas a pagar idependente se estão pagas
      */
-    IncomingOutgoingProjection:number;
+    incomingOutgoingProjection:number;
 }

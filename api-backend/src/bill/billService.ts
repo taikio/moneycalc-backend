@@ -54,6 +54,12 @@ export default class BillService {
             const billsList = await Bill.find().where('dueDate').gte(startDate).lte(endDate)
             .where('destiny').equals(destiny);
 
+            billsList.forEach(bill => {
+                if (bill.dueDate < new Date(Date.now())) {
+                    bill.status = SystemConstants.BillStatus_Vencido;
+                }
+            });
+
             return billsList;
         } catch(error) {
             throw new CustomError(error.message, 400, error.isOperational || false);
@@ -187,16 +193,16 @@ export default class BillService {
             const totalOutgoing = Enumerable.from(billsList).where(x => x.destiny === SystemConstants.BillDestinyPay);
 
             const accountBalance: OutputAccountBalanceDto = {
-                IncomingPendingQuantity: incomingPending.count(),
-                IncomingPendingValue: incomingPending.sum(x => x.value),
-                IncomingPaidQuantity: incomingPaid.count(),
-                IncomingPaidValue: incomingPaid.sum(x => x.value),
-                OutgoingPendingQuantity: outgoingPending.count(),
-                OutgoingPendingValue: outgoingPending.sum(x => x.value),
-                OutgoingPaidQuantity: outgoingPaid.sum(),
-                OutgoingPaidValue: outgoingPaid.sum(x => x.value),
-                IncomingOutgoingBalance: incomingPaid.sum(x => x.value) - outgoingPaid.sum(x => x.value),
-                IncomingOutgoingProjection: totalIncomes.sum(x => x.value) - totalOutgoing.sum(x => x.value)
+                incomingPendingQuantity: incomingPending.count(),
+                incomingPendingValue: incomingPending.sum(x => x.value),
+                incomingPaidQuantity: incomingPaid.count(),
+                incomingPaidValue: incomingPaid.sum(x => x.value),
+                outgoingPendingQuantity: outgoingPending.count(),
+                outgoingPendingValue: outgoingPending.sum(x => x.value),
+                outgoingPaidQuantity: outgoingPaid.sum(),
+                outgoingPaidValue: outgoingPaid.sum(x => x.value),
+                incomingOutgoingBalance: incomingPaid.sum(x => x.value) - outgoingPaid.sum(x => x.value),
+                incomingOutgoingProjection: totalIncomes.sum(x => x.value) - totalOutgoing.sum(x => x.value)
             }
 
             return accountBalance;

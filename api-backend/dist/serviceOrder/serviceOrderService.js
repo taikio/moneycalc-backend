@@ -71,7 +71,7 @@ var ServiceOrderService = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, serviceOrder_1.default.find()
-                            .populate('customer', 'name -_id')
+                            .populate('customer', '-_id')
                             .populate('bill', '-_id')];
                     case 1:
                         serviceOrders = _a.sent();
@@ -88,9 +88,14 @@ var ServiceOrderService = /** @class */ (function () {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, serviceOrder_1.default.find()
-                                .where('createdAt').gte(startDate).lte(endDate)];
+                                .where('createdAt').gte(startDate).lte(endDate)
+                                .populate('customer', '-_id')
+                                .populate('bill', '-_id').exec()];
                     case 1:
                         serviceOrders = _a.sent();
+                        // serviceOrders.forEach( element => {
+                        //     element.bill.value = parseFloat(element.bill.value);
+                        // });
                         return [2 /*return*/, serviceOrders];
                     case 2:
                         error_2 = _a.sent();

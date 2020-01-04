@@ -1862,7 +1862,7 @@
     }
 
     .pcoded-navbar {
-        margin-left: -#{$Menu-width};
+        // margin-left: -#{$Menu-width};
         position: absolute;
         height: 100%;
         box-shadow: none;
@@ -1892,6 +1892,10 @@
                 margin-left: 0;
             }
         }
+    }
+
+    .pcoded-navbar.hide-menu {
+        margin-left: -#{$Menu-width};
     }
 
     .pcoded-main-container {

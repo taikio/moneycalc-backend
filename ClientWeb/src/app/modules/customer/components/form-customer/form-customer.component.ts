@@ -32,15 +32,14 @@ export class FormCustomerComponent implements OnInit, OnDestroy {
       ]],
       shortName: ['', [
         Validators.required,
-      ]],
-      cpf: ['', [
-        Validators.required,
-        Validators.pattern('[0-9]{11}')
-      ]],
-      email: ['', [
-        Validators.required,
-        Validators.email
-      ]],
+      ]]
+      // cpf: ['', [
+      //   Validators.required,
+      //   Validators.pattern('[0-9]{11}')
+      // ]],
+      // email: ['', [
+      //   Validators.email
+      // ]],
     });
   }
 

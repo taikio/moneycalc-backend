@@ -11,6 +11,7 @@ import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { take } from 'rxjs/operators';
 import Swal from 'sweetalert2';
+import { LoadingService } from 'src/app/modules/ui/services/loading.service';
 
 @Component({
   selector: 'app-auth-signin',
@@ -24,7 +25,8 @@ export class AuthSigninComponent implements OnInit {
   constructor(
     private auth: AuthService,
     private fb: FormBuilder,
-    private router: Router) { }
+    private router: Router,
+    private loading: LoadingService) { }
 
   private buildForm() {
     this.authForm = this.fb.group({
@@ -38,11 +40,16 @@ export class AuthSigninComponent implements OnInit {
   }
 
   submmit() {
+    this.loading.showHide(true);
+
     this.auth.login(
       this.authForm.value.username,
       this.authForm.value.password
     ).subscribe(
-      () => this.router.navigate(['/dashboard']),
+      () => {
+        this.loading.showHide(false);
+        this.router.navigate(['/dashboard'])
+      },
       () => Swal.fire('Oops...', 'Falha ao logar! Verifique suas credenciais e tente novamente!', 'error')
     );
   }

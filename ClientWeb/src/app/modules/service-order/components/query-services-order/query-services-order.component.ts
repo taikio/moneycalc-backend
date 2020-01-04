@@ -37,10 +37,10 @@ export class QueryServicesOrderComponent implements OnInit, OnDestroy {
   private rowSelection;
 
   columnDefs = [
-    { headerName: 'ID Ordem', field: 'id', sortable: true, filter: true },
+    { headerName: 'ID Ordem', field: '_id', sortable: true, filter: true },
     { headerName: 'Descrição', field: 'description', sortable: true, filter: true },
-    { headerName: 'Cliente', field: 'customer.name', sortable: true, filter: true },
-    { headerName: 'Data', field: 'date', sortable: true, filter: true, valueFormatter: this.agGridHelper.dateFormatter },
+    { headerName: 'Cliente', field: 'customer.shortName', sortable: true, filter: true },
+    { headerName: 'Data', field: 'createdAt', sortable: true, filter: true, valueFormatter: this.agGridHelper.dateFormatter },
     {
       headerName: 'Cancelado?', field: 'isCanceled', sortable: true, filter: true, cellRenderer: params => {
         return `<input type='checkbox' ${params.value ? 'checked' : ''} />`;
@@ -49,39 +49,7 @@ export class QueryServicesOrderComponent implements OnInit, OnDestroy {
     {
       headerName: 'Dt. Cancelamento', field: 'cancelDate', sortable: true, filter: true, valueFormatter: this.agGridHelper.dateFormatter
     },
-    {
-      headerName: 'Lançamento',
-      marryChildren: true,
-      headerClass: 'lancamento',
-      children: [
-        {
-          headerName: 'Meio de Pagamento', field: 'bill.paymentMethod.description',
-          sortable: true, filter: true, columnGroupShow: 'open'
-        },
-        { headerName: 'Valor R$', field: 'bill.value', sortable: true, filter: true, valueFormatter: this.agGridHelper.currencyFormatter },
-        { headerName: 'Destino', field: 'bill.destiny', sortable: true, filter: true, columnGroupShow: 'open' },
-        { headerName: 'Status', field: 'bill.status', sortable: true, filter: true, columnGroupShow: 'open' },
-        {
-          headerName: 'Pago?', field: 'bill.paid', sortable: true, filter: true, cellRenderer: params => {
-            return `<input type='checkbox' ${params.value ? 'checked' : ''} />`;
-          }, columnGroupShow: 'open'
-        },
-        {
-          headerName: 'Dt. Vencimento', field: 'bill.dueDate', sortable: true, filter: true,
-          valueFormatter: this.agGridHelper.dateFormatter, columnGroupShow: 'open'
-        },
-        {
-          headerName: 'Dt. Pagamento', field: 'bill.payDate', sortable: true,
-          filter: true, valueFormatter: this.agGridHelper.dateFormatter, columnGroupShow: 'open'
-        },
-        { headerName: 'Dt. Reversão', field: 'bill.reversalDate', sortable: true, filter: true, columnGroupShow: 'open' },
-        {
-          headerName: 'Dt. Cancelamento', field: 'bill.cancelDate', sortable: true,
-          filter: true, valueFormatter: this.agGridHelper.dateFormatter, columnGroupShow: 'open'
-        },
-        { headerName: 'ID Lançamento', field: 'bill.id', sortable: true, filter: true, columnGroupShow: 'open' },
-      ]
-    },
+    { headerName: 'Valor (R$)', field: 'bill.value', sortable: true, filter: true }
   ];
 
   defaultColDef: {
@@ -148,7 +116,7 @@ export class QueryServicesOrderComponent implements OnInit, OnDestroy {
 
     const modalRef = this.modalService.open(ChangeServiceOrderComponent);
     modalRef.componentInstance.type = type;
-    modalRef.componentInstance.idServiceOrder = this.selectedRow.id;
+    modalRef.componentInstance.idServiceOrder = this.selectedRow._id;
 
     modalRef.result.then(() => {
       if (this.searchForm.valid) {

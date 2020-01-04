@@ -46,34 +46,38 @@ var serviceOrderService_1 = __importDefault(require("./serviceOrderService"));
 var errorMiddleware_1 = __importDefault(require("../middleware/errorMiddleware"));
 var billService_1 = __importDefault(require("../bill/billService"));
 var systemConstants_1 = __importDefault(require("../utils/systemConstants"));
+var validationMiddleware_1 = __importDefault(require("../middleware/validationMiddleware"));
+var newServiceOrderValidationSchema_1 = __importDefault(require("./validators/newServiceOrderValidationSchema"));
+var serviceOrderCustomerValidationSchema_1 = __importDefault(require("./validators/serviceOrderCustomerValidationSchema"));
+var serviceOrderDescriptionValidationSchema_1 = __importDefault(require("./validators/serviceOrderDescriptionValidationSchema"));
 var router = express_1.default.Router();
 router.use(authMiddleware_1.default);
-router.post('/New', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+router.post('/New', validationMiddleware_1.default(newServiceOrderValidationSchema_1.default), function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var bill, billService, savedBill, newServiceOrder, serviceOrderService, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 3, , 4]);
                 bill = {
-                    Description: req.body.Description,
-                    PaymentMethodSysId: req.body.PaymentMethodSysId,
-                    Value: req.body.Value,
-                    DueDate: req.body.DueDate
+                    Description: req.body.description,
+                    PaymentMethodSysId: req.body.paymentMethodSysId,
+                    Value: req.body.value,
+                    DueDate: req.body.dueDate
                 };
                 billService = new billService_1.default();
                 return [4 /*yield*/, billService.newBill(bill, systemConstants_1.default.BillDestinyReceive)];
             case 1:
                 savedBill = _a.sent();
                 newServiceOrder = new serviceOrder_1.default({
-                    description: req.body.Description,
-                    customer: req.body.CustomerId,
+                    description: req.body.description,
+                    customer: req.body.customerId,
                     bill: savedBill.id
                 });
                 serviceOrderService = new serviceOrderService_1.default();
                 return [4 /*yield*/, serviceOrderService.newServiceOrder(newServiceOrder)];
             case 2:
                 _a.sent();
-                return [2 /*return*/, res.send('Ok')];
+                return [2 /*return*/, res.status(200).send()];
             case 3:
                 error_1 = _a.sent();
                 next(error_1);
@@ -92,7 +96,7 @@ router.get('/GetList', function (_req, res, next) { return __awaiter(void 0, voi
                 return [4 /*yield*/, service.getAll()];
             case 1:
                 serviceOrderList = _a.sent();
-                return [2 /*return*/, res.send({ serviceOrders: serviceOrderList })];
+                return [2 /*return*/, res.send(serviceOrderList)];
             case 2:
                 error_2 = _a.sent();
                 next(error_2);
@@ -112,7 +116,7 @@ router.get('/GetByDate', function (req, res, next) { return __awaiter(void 0, vo
                 return [4 /*yield*/, serviceOrderService.GetServiceOrdersByDate(startDate, endDate)];
             case 1:
                 serviceOrderList = _b.sent();
-                return [2 /*return*/, res.send({ serviceOrders: serviceOrderList })];
+                return [2 /*return*/, res.send(serviceOrderList)];
             case 2:
                 error_3 = _b.sent();
                 next(error_3);
@@ -132,7 +136,7 @@ router.post('/Cancel:id', function (req, res, next) { return __awaiter(void 0, v
                 return [4 /*yield*/, serviceOrderService.CancelServiceOrder(id)];
             case 1:
                 _a.sent();
-                return [2 /*return*/, res.send('ok')];
+                return [2 /*return*/, res.status(200).send()];
             case 2:
                 error_4 = _a.sent();
                 next(error_4);
@@ -141,18 +145,18 @@ router.post('/Cancel:id', function (req, res, next) { return __awaiter(void 0, v
         }
     });
 }); });
-router.put('/Customer', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, CustomerId, ServiceOrderId, serviceOrderService, error_5;
+router.put('/Customer', validationMiddleware_1.default(serviceOrderCustomerValidationSchema_1.default), function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, customerId, id, serviceOrderService, error_5;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
                 _b.trys.push([0, 2, , 3]);
-                _a = req.body, CustomerId = _a.CustomerId, ServiceOrderId = _a.ServiceOrderId;
+                _a = req.body, customerId = _a.customerId, id = _a.id;
                 serviceOrderService = new serviceOrderService_1.default();
-                return [4 /*yield*/, serviceOrderService.changeCustomer(ServiceOrderId, CustomerId)];
+                return [4 /*yield*/, serviceOrderService.changeCustomer(id, customerId)];
             case 1:
                 _b.sent();
-                return [2 /*return*/, res.send('Ok')];
+                return [2 /*return*/, res.status(200).send()];
             case 2:
                 error_5 = _b.sent();
                 next(error_5);
@@ -161,18 +165,18 @@ router.put('/Customer', function (req, res, next) { return __awaiter(void 0, voi
         }
     });
 }); });
-router.put('/Description', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, ServiceOrderId, Description, serviceOrderService, error_6;
+router.put('/Description', validationMiddleware_1.default(serviceOrderDescriptionValidationSchema_1.default), function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, id, description, serviceOrderService, error_6;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
                 _b.trys.push([0, 2, , 3]);
-                _a = req.body, ServiceOrderId = _a.ServiceOrderId, Description = _a.Description;
+                _a = req.body, id = _a.id, description = _a.description;
                 serviceOrderService = new serviceOrderService_1.default();
-                return [4 /*yield*/, serviceOrderService.changeDescription(ServiceOrderId, Description)];
+                return [4 /*yield*/, serviceOrderService.changeDescription(id, description)];
             case 1:
                 _b.sent();
-                return [2 /*return*/, res.send('Ok')];
+                return [2 /*return*/, res.status(200).send()];
             case 2:
                 error_6 = _b.sent();
                 next(error_6);

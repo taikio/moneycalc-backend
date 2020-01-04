@@ -15,9 +15,7 @@ router.get('/GetPaymentMethods', async (_req, res, next) => {
         const lookupsService = new LookupsService();
         const listReturn = lookupsService.getPaymentMethods();
 
-        return res.send({
-            paymentMethods: listReturn
-           });
+        return res.send(listReturn);
 
     } catch(error) {
         next(error);
@@ -31,7 +29,7 @@ router.get('/GetCustomers', async (_req, res, next) => {
         const service = new CustomerService();
         const customersList = await service.getAll();
 
-        return res.send({ customers: customersList });
+        return res.send(customersList);
         
     } catch(error) {
         next(error);

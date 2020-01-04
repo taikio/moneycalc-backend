@@ -28,7 +28,7 @@ export interface AuthToken {
 export interface UserToken {
   username: string;
   password: string;
-  token?: AuthToken | null;
+  token?: string | null;
 }
 
 export interface User {
@@ -65,14 +65,12 @@ export class AuthService {
     const request = this.httpHelper.post('/users/token', body, false) as Observable<any>;
 
     return request.pipe(
-      map((token) => {
+      map((token: any) => {
         console.log('auth return', token);
         const user: UserToken = {
           username,
           password,
-          token: {
-            access_token: token
-          }
+          token: token.token
         };
 
         localStorage.setItem('current_user', JSON.stringify(user));

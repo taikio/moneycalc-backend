@@ -44,9 +44,15 @@ var customer_1 = __importDefault(require("./customer"));
 var customerService_1 = __importDefault(require("./customerService"));
 var authMiddleware_1 = __importDefault(require("../middleware/authMiddleware"));
 var errorMiddleware_1 = __importDefault(require("../middleware/errorMiddleware"));
+var validationMiddleware_1 = __importDefault(require("../middleware/validationMiddleware"));
+var newCustomerValidationSchema_1 = __importDefault(require("./validators/newCustomerValidationSchema"));
+var emailValidationSchema_1 = __importDefault(require("./validators/emailValidationSchema"));
+var nameValidationSchema_1 = __importDefault(require("./validators/nameValidationSchema"));
+var shortNameValidationSchema_1 = __importDefault(require("./validators/shortNameValidationSchema"));
+var cpfValidationSchema_1 = __importDefault(require("./validators/cpfValidationSchema"));
 var router = express_1.default.Router();
 router.use(authMiddleware_1.default);
-router.post('/', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+router.post('/', validationMiddleware_1.default(newCustomerValidationSchema_1.default), function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var newCustomer, customerService, customer, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -56,6 +62,7 @@ router.post('/', function (req, res, next) { return __awaiter(void 0, void 0, vo
                     name: req.body.name,
                     shortName: req.body.shortName,
                     cpf: req.body.cpf,
+                    email: req.body.email
                 });
                 customerService = new customerService_1.default();
                 return [4 /*yield*/, customerService.newCustomer(newCustomer)];
@@ -82,7 +89,7 @@ router.get('/GetList', function (_req, res, next) { return __awaiter(void 0, voi
                 return [4 /*yield*/, customerService.getAll()];
             case 1:
                 customersList = _a.sent();
-                return [2 /*return*/, res.send({ customers: customersList })];
+                return [2 /*return*/, res.send(customersList)];
             case 2:
                 error_2 = _a.sent();
                 next(error_2);
@@ -91,21 +98,21 @@ router.get('/GetList', function (_req, res, next) { return __awaiter(void 0, voi
         }
     });
 }); });
-router.put('/email', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+router.put('/email', validationMiddleware_1.default(emailValidationSchema_1.default), function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var customerId, email, customerService, error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                customerId = req.body.Id;
-                email = req.body.Email;
+                customerId = req.body.id;
+                email = req.body.email;
                 console.log('customer id', customerId);
                 console.log('customer email', email);
                 customerService = new customerService_1.default();
                 return [4 /*yield*/, customerService.changeCustomerEmail(customerId, email)];
             case 1:
                 _a.sent();
-                res.send('Ok');
+                res.status(200).send();
                 return [3 /*break*/, 3];
             case 2:
                 error_3 = _a.sent();
@@ -115,21 +122,21 @@ router.put('/email', function (req, res, next) { return __awaiter(void 0, void 0
         }
     });
 }); });
-router.put('/name', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+router.put('/name', validationMiddleware_1.default(nameValidationSchema_1.default), function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var customerId, name_1, customerService, error_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                customerId = req.body.Id;
-                name_1 = req.body.Name;
+                customerId = req.body.id;
+                name_1 = req.body.name;
                 console.log('customer id', customerId);
                 console.log('customer email', name_1);
                 customerService = new customerService_1.default();
                 return [4 /*yield*/, customerService.changeCustomerName(customerId, name_1)];
             case 1:
                 _a.sent();
-                res.send('Ok');
+                res.status(200).send();
                 return [3 /*break*/, 3];
             case 2:
                 error_4 = _a.sent();
@@ -139,21 +146,21 @@ router.put('/name', function (req, res, next) { return __awaiter(void 0, void 0,
         }
     });
 }); });
-router.put('/shortName', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+router.put('/shortName', validationMiddleware_1.default(shortNameValidationSchema_1.default), function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var customerId, name_2, customerService, error_5;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                customerId = req.body.Id;
-                name_2 = req.body.ShortName;
+                customerId = req.body.id;
+                name_2 = req.body.shortName;
                 console.log('customer id', customerId);
                 console.log('customer email', name_2);
                 customerService = new customerService_1.default();
                 return [4 /*yield*/, customerService.changeCustomerShortName(customerId, name_2)];
             case 1:
                 _a.sent();
-                res.send('Ok');
+                res.status(200).send();
                 return [3 /*break*/, 3];
             case 2:
                 error_5 = _a.sent();
@@ -163,21 +170,21 @@ router.put('/shortName', function (req, res, next) { return __awaiter(void 0, vo
         }
     });
 }); });
-router.put('/cpf', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+router.put('/cpf', validationMiddleware_1.default(cpfValidationSchema_1.default), function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var customerId, cpf, customerService, error_6;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                customerId = req.body.Id;
-                cpf = req.body.Cpf;
+                customerId = req.body.id;
+                cpf = req.body.cpf;
                 console.log('customer id', customerId);
                 console.log('customer email', cpf);
                 customerService = new customerService_1.default();
                 return [4 /*yield*/, customerService.changeCustomerCpf(customerId, cpf)];
             case 1:
                 _a.sent();
-                res.send('Ok');
+                res.status(200).send();
                 return [3 /*break*/, 3];
             case 2:
                 error_6 = _a.sent();
@@ -193,12 +200,12 @@ router.post('/cancel', function (req, res, next) { return __awaiter(void 0, void
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                customerId = req.params.Id;
+                customerId = req.params.id;
                 customerService = new customerService_1.default();
                 return [4 /*yield*/, customerService.delete(customerId)];
             case 1:
                 _a.sent();
-                res.send('Ok');
+                res.status(200).send();
                 return [3 /*break*/, 3];
             case 2:
                 error_7 = _a.sent();

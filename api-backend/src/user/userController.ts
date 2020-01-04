@@ -66,6 +66,19 @@ router.post('/resetPassword', authMiddleware, async (req: any, res, next) => {
     }
 });
 
+router.get('/GetProfile', authMiddleware, async (req: any, res, next) => {
+
+    try {
+        const userService = new UserService();
+        const user = await userService.getByid(req.userId);
+
+        return res.send(user);
+    } catch(error) {
+        next(error);
+        return;
+    }
+});
+
 
 router.use(errorMiddleware);
 

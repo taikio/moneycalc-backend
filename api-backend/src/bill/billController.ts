@@ -19,10 +19,10 @@ router.post('/NewPayable', ValidationMiddleware(NewBillValidationSchema), async 
     try {
         
         let inputBillDto: InputBillDto = {
-            PaymentMethodSysId: req.body.PaymentMethodSysId,
-            Description: req.body.Description,
-            Value: req.body.Value,
-            DueDate: req.body.DueDate
+            PaymentMethodSysId: req.body.paymentMethodSysId,
+            Description: req.body.description,
+            Value: req.body.value,
+            DueDate: req.body.dueDate
         };
 
         const billService = new BillService();
@@ -30,7 +30,7 @@ router.post('/NewPayable', ValidationMiddleware(NewBillValidationSchema), async 
         await billService.newBill(inputBillDto, SystemConstants.BillDestinyPay);
         
 
-        return res.send('Ok');
+        return res.status(200).send();
 
     } catch(error) {
         next(error);
@@ -43,10 +43,10 @@ router.post('/NewReceivable', ValidationMiddleware(NewBillValidationSchema), asy
     try {
         
         let inputBillDto: InputBillDto = {
-            PaymentMethodSysId: req.body.PaymentMethodSysId,
-            Description: req.body.Description,
-            Value: req.body.Value,
-            DueDate: req.body.DueDate
+            PaymentMethodSysId: req.body.paymentMethodSysId,
+            Description: req.body.description,
+            Value: req.body.value,
+            DueDate: req.body.dueDate
         };
 
         const billService = new BillService();
@@ -54,7 +54,7 @@ router.post('/NewReceivable', ValidationMiddleware(NewBillValidationSchema), asy
         await billService.newBill(inputBillDto, SystemConstants.BillDestinyReceive);
         
 
-        return res.send('Ok');
+        return res.status(200).send();
 
     } catch(error) {
         next(error);
@@ -68,7 +68,7 @@ router.get('/', async (_req, res, next) => {
         const billService = new BillService();
         const billsList = await billService.getAll();
 
-        return res.send ({ billsList });
+        return res.send (billsList);
     } catch(error) {
         next(error);
         return;
@@ -84,7 +84,7 @@ router.get('/GetByDate', async (req, res, next) => {
 
         const billsList = await billService.getBillsByDate(startDate, endDate, destiny);
 
-        res.send({ billsList });
+        res.send(billsList);
     } catch(error) {
         next(error);
         return;
@@ -94,13 +94,13 @@ router.get('/GetByDate', async (req, res, next) => {
 router.put('/PaymentMethod', ValidationMiddleware(PaymentMethodValidationSchema), async (req, res, next) => {
 
     try {
-        const { Id, PaymentMethodSysId } = req.body;
+        const { id, paymentMethodSysId } = req.body;
 
         const billService = new BillService();
 
-        await billService.updatePaymentMethod(Id, PaymentMethodSysId);
+        await billService.updatePaymentMethod(id, paymentMethodSysId);
 
-        return res.send('Ok');
+        return res.status(200).send();
     } catch(error) {
         next(error);
         return;
@@ -110,18 +110,18 @@ router.put('/PaymentMethod', ValidationMiddleware(PaymentMethodValidationSchema)
 router.put('/DueDate', ValidationMiddleware(DueDateValidationSchema), async (req, res, next) => {
 
     try {
-        const { Id, DueDate } = req.body;
+        const { id, dueDate } = req.body;
 
         const billService = new BillService();
 
-        const dateArray = DueDate.split('-');
+        const dateArray = dueDate.split('-');
 
 
         const newDueDate = new Date(dateArray[0], dateArray[1] - 1, dateArray[2]);
         console.log('dueDate', newDueDate.getVarDate);
-        await billService.updateDueDate(Id, newDueDate);
+        await billService.updateDueDate(id, newDueDate);
 
-        return res.send('Ok');
+        return res.status(200).send();
     } catch(error) {
         next(error);
         return;
@@ -131,13 +131,13 @@ router.put('/DueDate', ValidationMiddleware(DueDateValidationSchema), async (req
 router.put('/Value', ValidationMiddleware(ValueValidationSchema), async (req, res, next) => {
 
     try {
-        const { Id, Value } = req.body;
+        const { id, value } = req.body;
 
         const billService = new BillService();
 
-        await billService.updateValue(Id, Value);
+        await billService.updateValue(id, value);
 
-        return res.send('Ok');
+        return res.status(200).send();
     } catch(error) {
         next(error);
         return;
@@ -152,7 +152,7 @@ router.post('/Cancel/:id', async (req, res, next) => {
         const billService = new BillService();
         await billService.cancel(id);
 
-        return res.send('Ok');
+        return res.status(200).send();
     } catch(error) {
         next(error);
         return;
@@ -169,7 +169,7 @@ router.get('/AccountBalance', async (req, res, next) => {
 
         const accountBalance = await billService.getAccountBalance(startDate, endDate);
 
-        return res.send({ accountBalance });
+        return res.send(accountBalance);
     } catch(error) {
         next(error);
         return;
@@ -184,7 +184,7 @@ router.put('/MakeRetirement/:id', async (req, res, next) => {
         const billService = new BillService();
         await billService.MakeRetirement(id);
 
-        return res.send('Ok');
+        return res.status(200).send();
     } catch(error) {
         next(error);
         return;

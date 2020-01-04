@@ -6,7 +6,7 @@ import { Bill } from '../../bill/services/bill.service';
 import { Observable } from 'rxjs';
 
 export interface ServiceOrder {
-  id: string;
+  _id: string;
   description: string;
   customer: Customer;
   bill: Bill;
@@ -31,33 +31,35 @@ export class ServiceOrderService {
   constructor(private httpHelper: HttpHelperService) { }
 
   public newServiceOrder(order: NewServiceOrderDto) {
-    return this.httpHelper.post('/ServiceOrders/New', order);
+    return this.httpHelper.post('/api/ServiceOrders/New', order);
   }
 
   public cancel(id: string) {
-    return this.httpHelper.post(`/ServiceOrders/Cancel/${id}`, null);
+    return this.httpHelper.post(`/api/ServiceOrders/Cancel/${id}`, null);
   }
 
   public getAll(): Observable<ServiceOrder> {
-    return this.httpHelper.get('/ServiceOrders/GetList') as Observable<ServiceOrder>;
+    return this.httpHelper.get('/api/ServiceOrders/GetList') as Observable<ServiceOrder>;
   }
 
   public getByDate(startDate: string, endDate: string): Observable<ServiceOrder> {
-    return this.httpHelper.get('/ServiceOrders/GetByDate', {
+    return this.httpHelper.get('/api/ServiceOrders/GetByDate', {
       startDate,
       endDate,
     }) as Observable<ServiceOrder>;
   }
 
-  public changeCustomer(serviceOrderId: string, customerId: string) {
-    return this.httpHelper.put(`/ServiceOrders/Customer`, {
-      serviceOrderId, customerId
+  public changeCustomer(id: string, customerId: string) {
+    return this.httpHelper.put(`/api/ServiceOrders/Customer`, {
+      id, 
+      customerId
     });
   }
 
-  public changeDescription(serviceOrderId: string, description: string) {
-    return this.httpHelper.put(`/ServiceOrders/Description`, {
-      serviceOrderId, description
+  public changeDescription(id: string, description: string) {
+    return this.httpHelper.put(`/api/ServiceOrders/Description`, {
+      id, 
+      description
     });
   }
 }

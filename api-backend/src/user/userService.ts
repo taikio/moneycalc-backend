@@ -2,6 +2,7 @@ import User, { IUser } from "./user";
 import CustomError from '../utils/customError';
 import bcrypt from 'bcryptjs';
 import SvcUtils from '../utils/utilsService';
+import { OutputUserDto } from "./outputUserDto";
 
 export default class UserService {
 
@@ -68,5 +69,25 @@ export default class UserService {
             throw new CustomError(error.message, 400, error.isOperational || false);
         }
         
+    }
+
+    public async getByid(id: string): Promise<OutputUserDto> {
+        
+        try {
+            const loggedUser = await User.findById(id);
+        
+            if (loggedUser === null)
+                throw new  CustomError('Não foi possível obter informações do usuário', 400, true);
+
+            const outputUser: OutputUserDto = {
+                id: loggedUser.id,
+                firstName: loggedUser.name,
+                email: loggedUser.email
+            };
+
+            return outputUser;
+        } catch(error) {
+            throw new CustomError(error.message, 400, error.isOperational || false);
+        }
     }
 }

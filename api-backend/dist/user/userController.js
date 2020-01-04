@@ -121,6 +121,25 @@ router.post('/resetPassword', authMiddleware_1.default, function (req, res, next
         }
     });
 }); });
+router.get('/GetProfile', authMiddleware_1.default, function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var userService, user, error_4;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                userService = new userService_1.default();
+                return [4 /*yield*/, userService.getByid(req.userId)];
+            case 1:
+                user = _a.sent();
+                return [2 /*return*/, res.send(user)];
+            case 2:
+                error_4 = _a.sent();
+                next(error_4);
+                return [2 /*return*/];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); });
 router.use(errorMiddleware_1.default);
 exports.default = router;
 //# sourceMappingURL=userController.js.map

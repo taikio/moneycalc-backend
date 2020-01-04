@@ -44,25 +44,30 @@ var authMiddleware_1 = __importDefault(require("../middleware/authMiddleware"));
 var errorMiddleware_1 = __importDefault(require("../middleware/errorMiddleware"));
 var billService_1 = __importDefault(require("./billService"));
 var systemConstants_1 = __importDefault(require("../utils/systemConstants"));
+var validationMiddleware_1 = __importDefault(require("../middleware/validationMiddleware"));
+var newBillValidationSchema_1 = __importDefault(require("./validators/newBillValidationSchema"));
+var dueDateValidationSchema_1 = __importDefault(require("./validators/dueDateValidationSchema"));
+var paymentMethodValidationSchema_1 = __importDefault(require("./validators/paymentMethodValidationSchema"));
+var valueValidationSchema_1 = __importDefault(require("./validators/valueValidationSchema"));
 var router = express_1.default.Router();
 router.use(authMiddleware_1.default);
-router.post('/NewPayable', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+router.post('/NewPayable', validationMiddleware_1.default(newBillValidationSchema_1.default), function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var inputBillDto, billService, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
                 inputBillDto = {
-                    PaymentMethodSysId: req.body.PaymentMethodSysId,
-                    Description: req.body.Description,
-                    Value: req.body.Value,
-                    DueDate: req.body.DueDate
+                    PaymentMethodSysId: req.body.paymentMethodSysId,
+                    Description: req.body.description,
+                    Value: req.body.value,
+                    DueDate: req.body.dueDate
                 };
                 billService = new billService_1.default();
                 return [4 /*yield*/, billService.newBill(inputBillDto, systemConstants_1.default.BillDestinyPay)];
             case 1:
                 _a.sent();
-                return [2 /*return*/, res.send('Ok')];
+                return [2 /*return*/, res.status(200).send()];
             case 2:
                 error_1 = _a.sent();
                 next(error_1);
@@ -71,23 +76,23 @@ router.post('/NewPayable', function (req, res, next) { return __awaiter(void 0, 
         }
     });
 }); });
-router.post('/NewReceivable', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+router.post('/NewReceivable', validationMiddleware_1.default(newBillValidationSchema_1.default), function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var inputBillDto, billService, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
                 inputBillDto = {
-                    PaymentMethodSysId: req.body.PaymentMethodSysId,
-                    Description: req.body.Description,
-                    Value: req.body.Value,
-                    DueDate: req.body.DueDate
+                    PaymentMethodSysId: req.body.paymentMethodSysId,
+                    Description: req.body.description,
+                    Value: req.body.value,
+                    DueDate: req.body.dueDate
                 };
                 billService = new billService_1.default();
                 return [4 /*yield*/, billService.newBill(inputBillDto, systemConstants_1.default.BillDestinyReceive)];
             case 1:
                 _a.sent();
-                return [2 /*return*/, res.send('Ok')];
+                return [2 /*return*/, res.status(200).send()];
             case 2:
                 error_2 = _a.sent();
                 next(error_2);
@@ -106,7 +111,7 @@ router.get('/', function (_req, res, next) { return __awaiter(void 0, void 0, vo
                 return [4 /*yield*/, billService.getAll()];
             case 1:
                 billsList = _a.sent();
-                return [2 /*return*/, res.send({ billsList: billsList })];
+                return [2 /*return*/, res.send(billsList)];
             case 2:
                 error_3 = _a.sent();
                 next(error_3);
@@ -126,7 +131,7 @@ router.get('/GetByDate', function (req, res, next) { return __awaiter(void 0, vo
                 return [4 /*yield*/, billService.getBillsByDate(startDate, endDate, destiny)];
             case 1:
                 billsList = _b.sent();
-                res.send({ billsList: billsList });
+                res.send(billsList);
                 return [3 /*break*/, 3];
             case 2:
                 error_4 = _b.sent();
@@ -136,18 +141,18 @@ router.get('/GetByDate', function (req, res, next) { return __awaiter(void 0, vo
         }
     });
 }); });
-router.put('/PaymentMethod', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, Id, PaymentMethodSysId, billService, error_5;
+router.put('/PaymentMethod', validationMiddleware_1.default(paymentMethodValidationSchema_1.default), function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, id, paymentMethodSysId, billService, error_5;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
                 _b.trys.push([0, 2, , 3]);
-                _a = req.body, Id = _a.Id, PaymentMethodSysId = _a.PaymentMethodSysId;
+                _a = req.body, id = _a.id, paymentMethodSysId = _a.paymentMethodSysId;
                 billService = new billService_1.default();
-                return [4 /*yield*/, billService.updatePaymentMethod(Id, PaymentMethodSysId)];
+                return [4 /*yield*/, billService.updatePaymentMethod(id, paymentMethodSysId)];
             case 1:
                 _b.sent();
-                return [2 /*return*/, res.send('Ok')];
+                return [2 /*return*/, res.status(200).send()];
             case 2:
                 error_5 = _b.sent();
                 next(error_5);
@@ -156,21 +161,21 @@ router.put('/PaymentMethod', function (req, res, next) { return __awaiter(void 0
         }
     });
 }); });
-router.put('/DueDate', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, Id, DueDate, billService, dateArray, newDueDate, error_6;
+router.put('/DueDate', validationMiddleware_1.default(dueDateValidationSchema_1.default), function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, id, dueDate, billService, dateArray, newDueDate, error_6;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
                 _b.trys.push([0, 2, , 3]);
-                _a = req.body, Id = _a.Id, DueDate = _a.DueDate;
+                _a = req.body, id = _a.id, dueDate = _a.dueDate;
                 billService = new billService_1.default();
-                dateArray = DueDate.split('-');
+                dateArray = dueDate.split('-');
                 newDueDate = new Date(dateArray[0], dateArray[1] - 1, dateArray[2]);
                 console.log('dueDate', newDueDate.getVarDate);
-                return [4 /*yield*/, billService.updateDueDate(Id, newDueDate)];
+                return [4 /*yield*/, billService.updateDueDate(id, newDueDate)];
             case 1:
                 _b.sent();
-                return [2 /*return*/, res.send('Ok')];
+                return [2 /*return*/, res.status(200).send()];
             case 2:
                 error_6 = _b.sent();
                 next(error_6);
@@ -179,18 +184,18 @@ router.put('/DueDate', function (req, res, next) { return __awaiter(void 0, void
         }
     });
 }); });
-router.put('/Value', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, Id, Value, billService, error_7;
+router.put('/Value', validationMiddleware_1.default(valueValidationSchema_1.default), function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, id, value, billService, error_7;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
                 _b.trys.push([0, 2, , 3]);
-                _a = req.body, Id = _a.Id, Value = _a.Value;
+                _a = req.body, id = _a.id, value = _a.value;
                 billService = new billService_1.default();
-                return [4 /*yield*/, billService.updateValue(Id, Value)];
+                return [4 /*yield*/, billService.updateValue(id, value)];
             case 1:
                 _b.sent();
-                return [2 /*return*/, res.send('Ok')];
+                return [2 /*return*/, res.status(200).send()];
             case 2:
                 error_7 = _b.sent();
                 next(error_7);
@@ -210,7 +215,7 @@ router.post('/Cancel/:id', function (req, res, next) { return __awaiter(void 0, 
                 return [4 /*yield*/, billService.cancel(id)];
             case 1:
                 _a.sent();
-                return [2 /*return*/, res.send('Ok')];
+                return [2 /*return*/, res.status(200).send()];
             case 2:
                 error_8 = _a.sent();
                 next(error_8);
@@ -230,7 +235,7 @@ router.get('/AccountBalance', function (req, res, next) { return __awaiter(void 
                 return [4 /*yield*/, billService.getAccountBalance(startDate, endDate)];
             case 1:
                 accountBalance = _b.sent();
-                return [2 /*return*/, res.send({ accountBalance: accountBalance })];
+                return [2 /*return*/, res.send(accountBalance)];
             case 2:
                 error_9 = _b.sent();
                 next(error_9);
@@ -250,7 +255,7 @@ router.put('/MakeRetirement/:id', function (req, res, next) { return __awaiter(v
                 return [4 /*yield*/, billService.MakeRetirement(id)];
             case 1:
                 _a.sent();
-                return [2 /*return*/, res.send('Ok')];
+                return [2 /*return*/, res.status(200).send()];
             case 2:
                 error_10 = _a.sent();
                 next(error_10);
