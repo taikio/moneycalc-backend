@@ -9,7 +9,7 @@
     "debug": "nodemon --inspect src/www/server.ts",
     "build": "tsc",
     "prod": "npm run build && node dist/www/server.js",
-    "start": "node dest/www/server.js"
+    "start": "node dist/www/server.js"
   },
   "jest": {
     "transform": {
