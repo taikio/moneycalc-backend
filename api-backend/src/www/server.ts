@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 import app from '../app';
 require('dotenv').config();
 
-const port = process.env.PORT_MONEYCALC_DIST_WWW_SERVER || 3000;
+const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
 

@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose_1 = __importDefault(require("mongoose"));
 var app_1 = __importDefault(require("../app"));
 require('dotenv').config();
-var port = process.env.PORT_MONEYCALC_DIST_WWW_SERVER || 3000;
+var port = process.env.PORT || 3000;
 app_1.default.listen(port, function () {
     var mongooseOptions = {
         useNewUrlParser: true,
@@ -21,7 +21,7 @@ app_1.default.listen(port, function () {
     catch (err) {
         throw err;
     }
-    console.log("[SERVER] Running at http://localhost:" + port);
+    console.log("[SERVER] Running at http://localhost:3000");
 });
 // Close connection when aplication is closed
 process.on('SIGINT', function () {
