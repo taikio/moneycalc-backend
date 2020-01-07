@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    /* Basic Options */    
+    "target": "es5",
+    "module": "commonjs",
+    "sourceMap": true,
+     "outDir": "./dist",
+    /* Strict Type-Checking Options */
+    "strict": true,
+    /* Additional Checks */
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "esModuleInterop": true,
+    /* Advanced Options */
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "**/*.test.ts"]
+}
