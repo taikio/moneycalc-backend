@@ -41,5 +41,13 @@ app.get('/', (_, res) => {
     res.render('index');
 });
 
+app.get('/auth/sign', (_, res) => {
+    res.render('index');
+});
+
+app.get('/dashboard', (_, res) => {
+    res.render('index');
+});
+
 export default app;
 
