@@ -38,5 +38,11 @@ app.use('/api/bills', billController_1.default);
 app.get('/', function (_, res) {
     res.render('index');
 });
+app.get('/auth/sign', function (_, res) {
+    res.render('index');
+});
+app.get('/dashboard', function (_, res) {
+    res.render('index');
+});
 exports.default = app;
 //# sourceMappingURL=app.js.map
